@@ -1,9 +1,6 @@
 
 app = {}
 
-songname = (id) ->
-	id.replace /_\d$/, ''
-
 songmap =
 	'@naege': 'Come To Me'
 	'@youngwon': 'Forever'
@@ -80,12 +77,6 @@ songmap =
 	'jupiter': 'Jupiter Driving'
 	'xlasher': 'Xlasher'
 
-songtitle = (name) ->
-	if name of songmap
-		songmap[name]
-	else
-		(name + '').replace /^./, (x) -> x.toUpperCase()
-
 sorters = do ->
 
 	compare = (a, b) ->
@@ -99,11 +90,9 @@ sorters = do ->
 	stcompare = (num) -> (a, b) ->
 		return -1 if not b.course?
 		return 1 if not a.course?
-		titleA = songtitle(songname(idA = a.course.stages[num].song.id))
-		titleB = songtitle(songname(idB = b.course.stages[num].song.id))
-		titleCompare = compare titleA, titleB
+		titleCompare = compare a.course.stages[num].pattern.song.title, b.course.stages[num].pattern.song.title
 		if titleCompare == 0
-			compare idA, idB
+			compare a.course.stages[num].pattern.id, b.course.stages[num].pattern.id
 		else
 			titleCompare
 
@@ -119,15 +108,152 @@ sorters = do ->
 		return 1 if a.course.plays == 0
 		-1 * compare a.course.wins / a.course.plays, b.course.wins / b.course.plays
 
+class Song
+
+	@songs: {}
+
+	@getSong: (id) ->
+		if not (id of @songs)
+			@songs[id] = new @(id)
+		@songs[id]
+	
+	constructor: (@id) ->
+		if @id of songmap
+			@title = songmap[@id]
+		else
+			@title = (@id + '').replace /^./, (x) -> x.toUpperCase()
+
+class Pattern
+
+	@patterns: {}
+
+	@getPattern: (id) ->
+		if not (id of @patterns)
+			@patterns[id] = new @(id)
+		@patterns[id]
+
+	levelmap =
+		'1': 'NM'
+		'2': 'HD'
+		'3': 'MX'
+
+	constructor: (@id) ->
+		@song = Song.getSong @id.replace /_\d$/, ''
+		@level = parseInt @id.charAt @id.length - 1
+		@levelName = levelmap[@level]
+		@title = @song.title + ' ' + @levelName
+
+class Trie
+
+	constructor: ->
+		@data = {}
+		@crews = {}
+	
+	get: (id) ->
+		if id of @data
+			return @data[id]
+		return null
+	
+	allocate: (id) ->
+		if not (id of @data)
+			@data[id] = new Trie
+		return @data[id]
+
+class Search
+
+	constructor: ->
+		@all = []
+		@root = new Trie
+		@setupElements()
+	
+	setupElements: ->
+		@element = document.getElementById 'search'
+		@timer = 0
+		@element.onkeyup = =>
+			clearTimeout @timer
+			@timer = setTimeout (=> @update()), 0
+	
+	update: ->
+		results = @search()
+		@onupdate results
+
+	search: ->
+		last = null
+		results = {}
+		list = []
+		matches = @element.value.toLowerCase().match(/\S+/g)
+		if not matches
+			return @all
+		walk = (tree) ->
+			if not tree
+				return
+			for key of tree.crews
+				crew = tree.crews[key]
+				if last is null or crew.id of last
+					results[crew.id] = crew
+			for key of tree.data
+				walk tree.data[key]
+		for word in matches
+			walk @find word
+			last = results
+		for key of results
+			list.push results[key]
+		list
+
+	index: (word, crew) ->
+		@access(word).crews[crew.id] = crew
+
+	access: (word) ->
+		node = @root
+		for i in [0...word.length]
+			node = node.allocate word.charAt i
+		node
+
+	find: (word) ->
+		node = @root
+		for i in [0...word.length]
+			node = node.get word.charAt i
+			if node is null
+				break
+		node
+
+class Crew
+
+	nextID = 1
+
+	constructor: (obj) ->
+		@id = nextID++
+		for key of obj
+			@[key] = obj[key]
+		@keywords = [@name]
+		if @course?
+			@keywords.push @course.producer
+			for stage in @course.stages
+				stage.pattern = Pattern.getPattern stage.pattern
+				@keywords.push stage.pattern.title
+		@addKeywords()
+	
+	addKeywords: ->
+		matches = @keywords.join(' ').toLowerCase().match(/\S+/g)
+		if matches
+			for word in matches
+				app.search.index word, @
+
 class Renderer
 
 	constructor: ->
 		@element = document.getElementById 'main'
 		@data    = app.data
+		@source  = app.search
+		@source.onupdate = (@crews) => @sort(); @render()
 		@setupHandlers()
+		@setUpdatedText()
+
 		@sortModifier = 1
-		@setFilter()
-		@setSortKey 'rank'
+		@sortKey = 'rank'
+
+	setUpdatedText: ->
+		document.getElementById('updated').innerHTML = new Date(1000 * @data.updated).toString()
 
 	setupHandlers: ->
 		@element.onclick = (e) =>
@@ -136,15 +262,15 @@ class Renderer
 				@setSortKey e.target.getAttribute 'data-sort'
 				@render()
 
-	setFilter: (key) ->
-		@crews = (crew for crew in @data.crews)
-
 	setSortKey: (key) ->
 		if key == @sortKey
 			@sortModifier *= -1
 		else
 			@sortModifier = 1
 			@sortKey = key
+		@sort()
+	
+	sort: ->
 		@crews.sort (a, b) => sorters[@sortKey](a, b) * @sortModifier
 
 	render: ->
@@ -155,10 +281,6 @@ class Renderer
 
 	renderHeaders: ->
 		"""
-			<tr class="header">
-				<td class="name" colspan="3">Crewracing</td>
-				<td class="update" colspan="5">Last Updated: #{new Date(1000 * @data.updated).toString()}</td>
-			</tr>
 			<tr>
 				<th data-sort="rank" class="#{@sortClass 'rank'}">Rank</th>
 				<th data-sort="name" class="#{@sortClass 'name'}" colspan="2">Name</th>
@@ -222,6 +344,7 @@ class Renderer
 				<span class="details">
 					#{course.wins} / #{course.plays}
 				</span>
+				<span title="Producer" class="producer">#{course.producer}</span>
 			</td>
 		"""
 	
@@ -233,7 +356,7 @@ class Renderer
 	
 	renderStageSong: (stage) ->
 		"""
-			<img src="http://images.djmaxcrew.com/Technika2/EN/icon/technika2/disc_s/#{stage.song.id}.png">
+			<img src="http://images.djmaxcrew.com/Technika2/EN/icon/technika2/disc_s/#{stage.pattern.id}.png">
 			<span class="effectors">
 				#{@renderEffector(stage.effects.fade)}
 				#{@renderEffector(stage.effects.line)}
@@ -244,18 +367,16 @@ class Renderer
 	renderEffector: (fx) ->
 		fx
 	
-	levelMap =
-		'1': 'NM'
-		'2': 'HD'
-		'3': 'MX'
-
 	renderStageInfo: (stage) ->
 		"""
-			<span class="song-name">#{songtitle songname stage.song.id}</span> <span class="song-pattern p#{stage.song.level}">#{levelMap[stage.song.level]}</span>
+			<span class="song-name">#{stage.pattern.song.title}</span> <span class="song-pattern p#{stage.pattern.level}">#{stage.pattern.levelName}</span>
 		"""
 
 window.gotData = (x) ->
+	app.search = new Search
+	x.crews = (new Crew crewData for crewData in x.crews)
 	app.data = x
 	app.renderer = new Renderer
-	app.renderer.render()
+	app.search.all = x.crews
+	app.search.update()
 

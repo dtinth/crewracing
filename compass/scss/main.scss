@@ -1,7 +1,17 @@
 
+@import "compass";
+
 body {
 	font: 11pt Verdana, sans-serif;
 	text-align: center;
+}
+
+input {
+	@include border-radius;
+	@include background-image(linear-gradient(top, #ddd, #f5f5f5, #fff, #fff));
+	border: 1px solid #ccc;
+	font: 8pt Verdana, sans-serif;
+	padding-left: 2px;
 }
 
 table, tr, td {
@@ -11,9 +21,9 @@ table, tr, td {
 table {
 	text-align: left;
 	margin: 0 auto;
+	width: 840px;
 }
 
-@import "compass/css3/gradient";
 
 th {
 	@include background-image(linear-gradient(top, #ddd, #999));
@@ -42,6 +52,7 @@ th {
 
 .loading {
 	padding: 100px 10px;
+	font: 25px Georgia, sans-serif;
 }
 
 .header {
@@ -61,44 +72,38 @@ th {
 
 .crew {
 	height: 70px;
-}
-
-.crew td {
-	border-bottom: 1px solid #ccc;
-}
-
-.rank {
-	font: bold 20pt Helvetica, Arial, sans-serif;
-	width: 2.5em;
-	text-align: right;
-	padding-right: 1ex;
-	color: #444;
-}
-
-.emblem {
-}
-
-.name {
-	padding-left: 1ex;
-	width: 10em;
-}
-
-.crew-points {
-	display: block;
-	font-size: 0.8em;
-	padding-top: 0.4ex;
-	color: #666;
+	td {
+		border-bottom: 1px solid #ccc;
+	}
+	.rank {
+		font: bold 20pt Helvetica, Arial, sans-serif;
+		width: 2.5em;
+		text-align: right;
+		padding-right: 1ex;
+		color: #444;
+	}
+	.emblem {
+	}
+	.name {
+		padding-left: 1ex;
+		width: 10em;
+		.crew-points {
+			display: block;
+			font-size: 0.8em;
+			padding-top: 0.4ex;
+			color: #666;
+		}
+	}
 }
 
 .no-course {
 	text-align: center;
+	color: #aaa;
 }
-
 .song {
 	text-align: center;
 	width: 80px;
 }
-
 .effectors {
 	display: block;
 	font-size: 0.8em;
@@ -106,10 +111,14 @@ th {
 }
 
 .course-info {
-	.song-line {
+	.producer-line, .song-line {
 		display: block;
 		font-size: 0.8em;
-		margin: 0.5ex 0;
+		margin: 0.4ex 0;
+	}
+	.producer-line {
+		font-size: 0.7em;
+		color: #555;
 	}
 	padding-left: 1em;
 }
@@ -120,12 +129,16 @@ th {
 	padding-right: 2em;
 	.percentage {
 		display: block;
-		font: bold 18pt Helvetica, Arial, sans-serif;
+		font: bold 16pt Helvetica, Arial, sans-serif;
 		color: #444;
 	}
-	.details {
+	.details, .producer {
+		display: block;
 		color: #888;
 		font-size: 0.8em;
+	}
+	.producer {
+		font-size: 0.7em;
 	}
 }
 
@@ -135,3 +148,4 @@ th {
 	&.p2 { color: #36c; }
 	&.p3 { color: #d33; }
 }
+

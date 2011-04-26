@@ -1,21 +1,40 @@
-/* line 2, ../scss/main.scss */
+/* line 4, ../scss/main.scss */
 body {
   font: 11pt Verdana, sans-serif;
   text-align: center;
 }
 
-/* line 7, ../scss/main.scss */
+/* line 9, ../scss/main.scss */
+input {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(33.333%, #f5f5f5), color-stop(66.667%, #ffffff), color-stop(100%, #ffffff));
+  background-image: -webkit-linear-gradient(top, #dddddd, #f5f5f5, #ffffff, #ffffff);
+  background-image: -moz-linear-gradient(top, #dddddd, #f5f5f5, #ffffff, #ffffff);
+  background-image: -o-linear-gradient(top, #dddddd, #f5f5f5, #ffffff, #ffffff);
+  background-image: linear-gradient(top, #dddddd, #f5f5f5, #ffffff, #ffffff);
+  border: 1px solid #ccc;
+  font: 8pt Verdana, sans-serif;
+  padding-left: 2px;
+}
+
+/* line 17, ../scss/main.scss */
 table, tr, td {
   font-size: 1em;
 }
 
-/* line 11, ../scss/main.scss */
+/* line 21, ../scss/main.scss */
 table {
   text-align: left;
   margin: 0 auto;
+  width: 840px;
 }
 
-/* line 18, ../scss/main.scss */
+/* line 28, ../scss/main.scss */
 th {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #999999));
   background-image: -webkit-linear-gradient(top, #dddddd, #999999);
@@ -27,143 +46,151 @@ th {
   font: bold 9pt/24px Helvetica, Arial, sans-serif;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-/* line 24, ../scss/main.scss */
+/* line 34, ../scss/main.scss */
 th.last {
   padding-right: 1.4em;
 }
-/* line 27, ../scss/main.scss */
+/* line 37, ../scss/main.scss */
 th[data-sort] {
   cursor: pointer;
 }
-/* line 30, ../scss/main.scss */
+/* line 40, ../scss/main.scss */
 th.sort-ascending, th.sort-descending {
   color: #000;
 }
-/* line 33, ../scss/main.scss */
+/* line 43, ../scss/main.scss */
 th.sort-ascending:after {
   content: "▲";
   color: #777;
 }
-/* line 37, ../scss/main.scss */
+/* line 47, ../scss/main.scss */
 th.sort-descending:after {
   content: "▼";
   color: #777;
 }
 
-/* line 43, ../scss/main.scss */
+/* line 53, ../scss/main.scss */
 .loading {
   padding: 100px 10px;
+  font: 25px Georgia, sans-serif;
 }
 
-/* line 48, ../scss/main.scss */
+/* line 59, ../scss/main.scss */
 .header td {
   vertical-align: bottom;
   padding: 10px 1em 10px;
   font-family: Helvetica, Arial, sans-serif;
   color: #888;
 }
-/* line 54, ../scss/main.scss */
+/* line 65, ../scss/main.scss */
 .header .name {
   font-weight: bold;
 }
-/* line 57, ../scss/main.scss */
+/* line 68, ../scss/main.scss */
 .header .update {
   text-align: right;
 }
 
-/* line 62, ../scss/main.scss */
+/* line 73, ../scss/main.scss */
 .crew {
   height: 70px;
 }
-
-/* line 66, ../scss/main.scss */
+/* line 75, ../scss/main.scss */
 .crew td {
   border-bottom: 1px solid #ccc;
 }
-
-/* line 70, ../scss/main.scss */
-.rank {
+/* line 78, ../scss/main.scss */
+.crew .rank {
   font: bold 20pt Helvetica, Arial, sans-serif;
   width: 2.5em;
   text-align: right;
   padding-right: 1ex;
   color: #444;
 }
-
-/* line 81, ../scss/main.scss */
-.name {
+/* line 87, ../scss/main.scss */
+.crew .name {
   padding-left: 1ex;
   width: 10em;
 }
-
-/* line 86, ../scss/main.scss */
-.crew-points {
+/* line 90, ../scss/main.scss */
+.crew .name .crew-points {
   display: block;
   font-size: 0.8em;
   padding-top: 0.4ex;
   color: #666;
 }
 
-/* line 93, ../scss/main.scss */
+/* line 99, ../scss/main.scss */
 .no-course {
   text-align: center;
+  color: #aaa;
 }
 
-/* line 97, ../scss/main.scss */
+/* line 103, ../scss/main.scss */
 .song {
   text-align: center;
   width: 80px;
 }
 
-/* line 102, ../scss/main.scss */
+/* line 107, ../scss/main.scss */
 .effectors {
   display: block;
   font-size: 0.8em;
   color: #444;
 }
 
-/* line 108, ../scss/main.scss */
+/* line 113, ../scss/main.scss */
 .course-info {
   padding-left: 1em;
 }
-/* line 109, ../scss/main.scss */
-.course-info .song-line {
+/* line 114, ../scss/main.scss */
+.course-info .producer-line, .course-info .song-line {
   display: block;
   font-size: 0.8em;
-  margin: 0.5ex 0;
+  margin: 0.4ex 0;
+}
+/* line 119, ../scss/main.scss */
+.course-info .producer-line {
+  font-size: 0.7em;
+  color: #555;
 }
 
-/* line 117, ../scss/main.scss */
+/* line 126, ../scss/main.scss */
 .win-info {
   text-align: center;
   padding-left: 1em;
   padding-right: 2em;
 }
-/* line 121, ../scss/main.scss */
+/* line 130, ../scss/main.scss */
 .win-info .percentage {
   display: block;
-  font: bold 18pt Helvetica, Arial, sans-serif;
+  font: bold 16pt Helvetica, Arial, sans-serif;
   color: #444;
 }
-/* line 126, ../scss/main.scss */
-.win-info .details {
+/* line 135, ../scss/main.scss */
+.win-info .details, .win-info .producer {
+  display: block;
   color: #888;
   font-size: 0.8em;
 }
+/* line 140, ../scss/main.scss */
+.win-info .producer {
+  font-size: 0.7em;
+}
 
-/* line 132, ../scss/main.scss */
+/* line 145, ../scss/main.scss */
 .song-pattern {
   font-weight: bold;
 }
-/* line 134, ../scss/main.scss */
+/* line 147, ../scss/main.scss */
 .song-pattern.p1 {
   color: #ba2;
 }
-/* line 135, ../scss/main.scss */
+/* line 148, ../scss/main.scss */
 .song-pattern.p2 {
   color: #36c;
 }
-/* line 136, ../scss/main.scss */
+/* line 149, ../scss/main.scss */
 .song-pattern.p3 {
   color: #d33;
 }
