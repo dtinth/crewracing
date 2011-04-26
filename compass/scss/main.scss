@@ -13,6 +13,52 @@ table {
 	margin: 0 auto;
 }
 
+@import "compass/css3/gradient";
+
+th {
+	@include background-image(linear-gradient(top, #ddd, #999));
+	text-align: center;
+	color: #444;
+	font: bold 9pt/24px Helvetica, Arial, sans-serif;
+	text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+	&.last {
+		padding-right: 1.4em;
+	}
+	&[data-sort] {
+		cursor: pointer;
+	}
+	&.sort-ascending, &.sort-descending {
+		color: #000;
+	}
+	&.sort-ascending:after {
+		content: "▲";
+		color: #777;
+	}
+	&.sort-descending:after {
+		content: "▼";
+		color: #777;
+	}
+}
+
+.loading {
+	padding: 100px 10px;
+}
+
+.header {
+	td {
+		vertical-align: bottom;
+		padding: 10px 1em 10px;
+		font-family: Helvetica, Arial, sans-serif;
+		color: #888;
+	}
+	.name {
+		font-weight: bold;
+	}
+	.update {
+		text-align: right;
+	}
+}
+
 .crew {
 	height: 70px;
 }
@@ -66,11 +112,11 @@ table {
 		margin: 0.5ex 0;
 	}
 	padding-left: 1em;
-	padding-right: 0.8em;
 }
 
 .win-info {
 	text-align: center;
+	padding-left: 1em;
 	padding-right: 2em;
 	.percentage {
 		display: block;

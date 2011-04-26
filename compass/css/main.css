@@ -1,0 +1,169 @@
+/* line 2, ../scss/main.scss */
+body {
+  font: 11pt Verdana, sans-serif;
+  text-align: center;
+}
+
+/* line 7, ../scss/main.scss */
+table, tr, td {
+  font-size: 1em;
+}
+
+/* line 11, ../scss/main.scss */
+table {
+  text-align: left;
+  margin: 0 auto;
+}
+
+/* line 18, ../scss/main.scss */
+th {
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #999999));
+  background-image: -webkit-linear-gradient(top, #dddddd, #999999);
+  background-image: -moz-linear-gradient(top, #dddddd, #999999);
+  background-image: -o-linear-gradient(top, #dddddd, #999999);
+  background-image: linear-gradient(top, #dddddd, #999999);
+  text-align: center;
+  color: #444;
+  font: bold 9pt/24px Helvetica, Arial, sans-serif;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+/* line 24, ../scss/main.scss */
+th.last {
+  padding-right: 1.4em;
+}
+/* line 27, ../scss/main.scss */
+th[data-sort] {
+  cursor: pointer;
+}
+/* line 30, ../scss/main.scss */
+th.sort-ascending, th.sort-descending {
+  color: #000;
+}
+/* line 33, ../scss/main.scss */
+th.sort-ascending:after {
+  content: "▲";
+  color: #777;
+}
+/* line 37, ../scss/main.scss */
+th.sort-descending:after {
+  content: "▼";
+  color: #777;
+}
+
+/* line 43, ../scss/main.scss */
+.loading {
+  padding: 100px 10px;
+}
+
+/* line 48, ../scss/main.scss */
+.header td {
+  vertical-align: bottom;
+  padding: 10px 1em 10px;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #888;
+}
+/* line 54, ../scss/main.scss */
+.header .name {
+  font-weight: bold;
+}
+/* line 57, ../scss/main.scss */
+.header .update {
+  text-align: right;
+}
+
+/* line 62, ../scss/main.scss */
+.crew {
+  height: 70px;
+}
+
+/* line 66, ../scss/main.scss */
+.crew td {
+  border-bottom: 1px solid #ccc;
+}
+
+/* line 70, ../scss/main.scss */
+.rank {
+  font: bold 20pt Helvetica, Arial, sans-serif;
+  width: 2.5em;
+  text-align: right;
+  padding-right: 1ex;
+  color: #444;
+}
+
+/* line 81, ../scss/main.scss */
+.name {
+  padding-left: 1ex;
+  width: 10em;
+}
+
+/* line 86, ../scss/main.scss */
+.crew-points {
+  display: block;
+  font-size: 0.8em;
+  padding-top: 0.4ex;
+  color: #666;
+}
+
+/* line 93, ../scss/main.scss */
+.no-course {
+  text-align: center;
+}
+
+/* line 97, ../scss/main.scss */
+.song {
+  text-align: center;
+  width: 80px;
+}
+
+/* line 102, ../scss/main.scss */
+.effectors {
+  display: block;
+  font-size: 0.8em;
+  color: #444;
+}
+
+/* line 108, ../scss/main.scss */
+.course-info {
+  padding-left: 1em;
+}
+/* line 109, ../scss/main.scss */
+.course-info .song-line {
+  display: block;
+  font-size: 0.8em;
+  margin: 0.5ex 0;
+}
+
+/* line 117, ../scss/main.scss */
+.win-info {
+  text-align: center;
+  padding-left: 1em;
+  padding-right: 2em;
+}
+/* line 121, ../scss/main.scss */
+.win-info .percentage {
+  display: block;
+  font: bold 18pt Helvetica, Arial, sans-serif;
+  color: #444;
+}
+/* line 126, ../scss/main.scss */
+.win-info .details {
+  color: #888;
+  font-size: 0.8em;
+}
+
+/* line 132, ../scss/main.scss */
+.song-pattern {
+  font-weight: bold;
+}
+/* line 134, ../scss/main.scss */
+.song-pattern.p1 {
+  color: #ba2;
+}
+/* line 135, ../scss/main.scss */
+.song-pattern.p2 {
+  color: #36c;
+}
+/* line 136, ../scss/main.scss */
+.song-pattern.p3 {
+  color: #d33;
+}

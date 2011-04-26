@@ -1,5 +1,6 @@
 (function() {
-  var Renderer, app, songmap, songname, songtitle;
+  var Renderer, app, songmap, songname, songtitle, sorters;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   app = {};
   songname = function(id) {
     return id.replace(/_\d$/, '');
@@ -89,14 +90,109 @@
       });
     }
   };
+  sorters = (function() {
+    var compare, stcompare;
+    compare = function(a, b) {
+      if (a > b) {
+        return 1;
+      } else if (a < b) {
+        return -1;
+      } else {
+        return 0;
+      }
+    };
+    stcompare = function(num) {
+      return function(a, b) {
+        var idA, idB, titleA, titleB, titleCompare;
+        if (!(b.course != null)) {
+          return -1;
+        }
+        if (!(a.course != null)) {
+          return 1;
+        }
+        titleA = songtitle(songname(idA = a.course.stages[num].song.id));
+        titleB = songtitle(songname(idB = b.course.stages[num].song.id));
+        titleCompare = compare(titleA, titleB);
+        if (titleCompare === 0) {
+          return compare(idA, idB);
+        } else {
+          return titleCompare;
+        }
+      };
+    };
+    return {
+      rank: function(a, b) {
+        return a.rank - b.rank;
+      },
+      name: function(a, b) {
+        return compare(a.name.toLowerCase(), b.name.toLowerCase());
+      },
+      stage1: stcompare(0),
+      stage2: stcompare(1),
+      stage3: stcompare(2),
+      winrate: function(a, b) {
+        if (!(b.course != null)) {
+          return -1;
+        }
+        if (!(a.course != null)) {
+          return 1;
+        }
+        if (b.course.plays === 0) {
+          return -1;
+        }
+        if (a.course.plays === 0) {
+          return 1;
+        }
+        return -1 * compare(a.course.wins / a.course.plays, b.course.wins / b.course.plays);
+      }
+    };
+  })();
   Renderer = (function() {
     var levelMap;
     function Renderer() {
       this.element = document.getElementById('main');
       this.data = app.data;
+      this.setupHandlers();
+      this.sortModifier = 1;
+      this.setSortKey('rank');
     }
+    Renderer.prototype.setupHandlers = function() {
+      return this.element.onclick = __bind(function(e) {
+        var target;
+        target = e.target;
+        if (e.target.hasAttribute('data-sort')) {
+          this.setSortKey(e.target.getAttribute('data-sort'));
+          return this.render();
+        }
+      }, this);
+    };
+    Renderer.prototype.setSortKey = function(key) {
+      if (key === this.sortKey) {
+        this.sortModifier *= -1;
+      } else {
+        this.sortModifier = 1;
+        this.sortKey = key;
+      }
+      return this.data.crews.sort(__bind(function(a, b) {
+        return sorters[this.sortKey](a, b) * this.sortModifier;
+      }, this));
+    };
     Renderer.prototype.render = function() {
-      return this.element.innerHTML = "<table cellspacing=\"0\" class=\"crew-list\">" + (this.renderCrews()) + "\n</table>";
+      return this.element.innerHTML = "<table cellspacing=\"0\" class=\"crew-list\">" + (this.renderHeaders()) + (this.renderCrews()) + "\n</table>";
+    };
+    Renderer.prototype.renderHeaders = function() {
+      return "<tr class=\"header\">\n	<td class=\"name\" colspan=\"3\">Crewracing</td>\n	<td class=\"update\" colspan=\"5\">Last Updated: " + (new Date(1000 * this.data.updated).toString()) + "</td>\n</tr>\n<tr>\n	<th data-sort=\"rank\" class=\"" + (this.sortClass('rank')) + "\">Rank</th>\n	<th data-sort=\"name\" class=\"" + (this.sortClass('name')) + "\" colspan=\"2\">Name</th>\n	<th data-sort=\"stage1\" class=\"" + (this.sortClass('stage1')) + "\">Stage 1</th>\n	<th data-sort=\"stage2\" class=\"" + (this.sortClass('stage2')) + "\">Stage 2</th>\n	<th data-sort=\"stage3\" class=\"" + (this.sortClass('stage3')) + "\">Stage 3</th>\n	<th>Course</th>\n	<th data-sort=\"winrate\" class=\"" + (this.sortClass('winrate')) + " last\">Win Rate</th>\n</tr>";
+    };
+    Renderer.prototype.sortClass = function(k) {
+      if (this.sortKey === k) {
+        if (this.sortModifier >= 0) {
+          return "sort-ascending";
+        } else {
+          return "sort-descending";
+        }
+      } else {
+        return "sort-none";
+      }
     };
     Renderer.prototype.renderCrews = function() {
       var crew, html, _i, _len, _ref;
