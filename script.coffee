@@ -126,6 +126,7 @@ class Renderer
 		@data    = app.data
 		@setupHandlers()
 		@sortModifier = 1
+		@setFilter()
 		@setSortKey 'rank'
 
 	setupHandlers: ->
@@ -135,13 +136,16 @@ class Renderer
 				@setSortKey e.target.getAttribute 'data-sort'
 				@render()
 
+	setFilter: (key) ->
+		@crews = (crew for crew in @data.crews)
+
 	setSortKey: (key) ->
 		if key == @sortKey
 			@sortModifier *= -1
 		else
 			@sortModifier = 1
 			@sortKey = key
-		@data.crews.sort (a, b) => sorters[@sortKey](a, b) * @sortModifier
+		@crews.sort (a, b) => sorters[@sortKey](a, b) * @sortModifier
 
 	render: ->
 		@element.innerHTML = """
@@ -177,7 +181,7 @@ class Renderer
 
 	renderCrews: ->
 		html = ''
-		html += @renderCrew(crew) for crew in @data.crews
+		html += @renderCrew(crew) for crew in @crews
 		html
 
 	renderCrew: (crew) ->

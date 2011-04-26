@@ -154,6 +154,7 @@
       this.data = app.data;
       this.setupHandlers();
       this.sortModifier = 1;
+      this.setFilter();
       this.setSortKey('rank');
     }
     Renderer.prototype.setupHandlers = function() {
@@ -166,6 +167,19 @@
         }
       }, this);
     };
+    Renderer.prototype.setFilter = function(key) {
+      var crew;
+      return this.crews = (function() {
+        var _i, _len, _ref, _results;
+        _ref = this.data.crews;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          crew = _ref[_i];
+          _results.push(crew);
+        }
+        return _results;
+      }).call(this);
+    };
     Renderer.prototype.setSortKey = function(key) {
       if (key === this.sortKey) {
         this.sortModifier *= -1;
@@ -173,7 +187,7 @@
         this.sortModifier = 1;
         this.sortKey = key;
       }
-      return this.data.crews.sort(__bind(function(a, b) {
+      return this.crews.sort(__bind(function(a, b) {
         return sorters[this.sortKey](a, b) * this.sortModifier;
       }, this));
     };
@@ -197,7 +211,7 @@
     Renderer.prototype.renderCrews = function() {
       var crew, html, _i, _len, _ref;
       html = '';
-      _ref = this.data.crews;
+      _ref = this.crews;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         crew = _ref[_i];
         html += this.renderCrew(crew);
