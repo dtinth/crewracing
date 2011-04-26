@@ -8,3 +8,14 @@ which is regenerated every 30 minutes from [DJMAX TECHNIKA2 website](http://www.
 The fetching process is done by a PHP script. To see the code please look at the "server" branch.
 
 
+Development
+-----------
+
+CSS file `css/main.css` is generated from SCSS file `scss/main.scss`, using Compass:
+
+    cd compass
+	compass watch
+
+JavaScript file `script.js` is generated from CoffeeScript `script.coffee`:
+
+    coffee -c -w script.coffee
