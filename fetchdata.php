@@ -75,11 +75,13 @@ class CrewListLoader {
 		for ($i = 0; $i < 3; $i ++) {
 			$stages[] = new Stage(array(
 				'song'    => null,
+				'pattern' => null,
 				'effects' => new Effects,
 			));
 		}
 		foreach ($this->xp->query('.//td[@width=52]/img/@src', $node) as $k => $v) {
 			$stages[$k]->song = new Song($v->nodeValue);
+			$stages[$k]->pattern = $v->nodeValue;
 		}
 		$categories = array('fade', 'line', 'scroll');
 		foreach (array_map('trim', explode(':', trim($this->xp->query('.//td[@width=170]/span/text()', $node)->item(0)->nodeValue))) as $stage => $effector) {
