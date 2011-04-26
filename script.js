@@ -204,11 +204,14 @@
     Search.prototype.setupElements = function() {
       this.element = document.getElementById('search');
       this.timer = 0;
-      return this.element.onkeyup = __bind(function() {
+      this.element.onkeyup = __bind(function() {
         clearTimeout(this.timer);
         return this.timer = setTimeout((__bind(function() {
           return this.update();
         }, this)), 0);
+      }, this);
+      return this.element.onchange = __bind(function() {
+        return this.update();
       }, this);
     };
     Search.prototype.update = function() {

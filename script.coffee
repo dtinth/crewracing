@@ -172,6 +172,7 @@ class Search
 		@element.onkeyup = =>
 			clearTimeout @timer
 			@timer = setTimeout (=> @update()), 0
+		@element.onchange = => @update()
 	
 	update: ->
 		results = @search()

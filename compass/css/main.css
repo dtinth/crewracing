@@ -144,53 +144,54 @@ th.sort-descending:after {
   padding-left: 1em;
 }
 /* line 114, ../scss/main.scss */
-.course-info .producer-line, .course-info .song-line {
+.course-info .song-line {
   display: block;
   font-size: 0.8em;
   margin: 0.4ex 0;
+  white-space: nowrap;
 }
-/* line 119, ../scss/main.scss */
+/* line 120, ../scss/main.scss */
 .course-info .producer-line {
   font-size: 0.7em;
   color: #555;
 }
 
-/* line 126, ../scss/main.scss */
+/* line 127, ../scss/main.scss */
 .win-info {
   text-align: center;
   padding-left: 1em;
   padding-right: 2em;
 }
-/* line 130, ../scss/main.scss */
+/* line 131, ../scss/main.scss */
 .win-info .percentage {
   display: block;
   font: bold 16pt Helvetica, Arial, sans-serif;
   color: #444;
 }
-/* line 135, ../scss/main.scss */
+/* line 136, ../scss/main.scss */
 .win-info .details, .win-info .producer {
   display: block;
   color: #888;
   font-size: 0.8em;
 }
-/* line 140, ../scss/main.scss */
+/* line 141, ../scss/main.scss */
 .win-info .producer {
   font-size: 0.7em;
 }
 
-/* line 145, ../scss/main.scss */
+/* line 146, ../scss/main.scss */
 .song-pattern {
   font-weight: bold;
 }
-/* line 147, ../scss/main.scss */
+/* line 148, ../scss/main.scss */
 .song-pattern.p1 {
   color: #ba2;
 }
-/* line 148, ../scss/main.scss */
+/* line 149, ../scss/main.scss */
 .song-pattern.p2 {
   color: #36c;
 }
-/* line 149, ../scss/main.scss */
+/* line 150, ../scss/main.scss */
 .song-pattern.p3 {
   color: #d33;
 }

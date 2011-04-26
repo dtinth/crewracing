@@ -111,10 +111,11 @@ th {
 }
 
 .course-info {
-	.producer-line, .song-line {
+	.song-line {
 		display: block;
 		font-size: 0.8em;
 		margin: 0.4ex 0;
+		white-space: nowrap;
 	}
 	.producer-line {
 		font-size: 0.7em;
