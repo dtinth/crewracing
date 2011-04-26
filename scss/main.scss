@@ -1,0 +1,91 @@
+
+body {
+	font: 11pt Verdana, sans-serif;
+	text-align: center;
+}
+
+table, tr, td {
+	font-size: 1em;
+}
+
+table {
+	text-align: left;
+	margin: 0 auto;
+}
+
+.crew {
+	height: 70px;
+}
+
+.crew td {
+	border-bottom: 1px solid #ccc;
+}
+
+.rank {
+	font: bold 20pt Helvetica, Arial, sans-serif;
+	width: 2.5em;
+	text-align: right;
+	padding-right: 1ex;
+	color: #444;
+}
+
+.emblem {
+}
+
+.name {
+	padding-left: 1ex;
+	width: 10em;
+}
+
+.crew-points {
+	display: block;
+	font-size: 0.8em;
+	padding-top: 0.4ex;
+	color: #666;
+}
+
+.no-course {
+	text-align: center;
+}
+
+.song {
+	text-align: center;
+	width: 80px;
+}
+
+.effectors {
+	display: block;
+	font-size: 0.8em;
+	color: #444;
+}
+
+.course-info {
+	.song-line {
+		display: block;
+		font-size: 0.8em;
+		margin: 0.5ex 0;
+	}
+	padding-left: 1em;
+	padding-right: 0.8em;
+}
+
+.win-info {
+	text-align: center;
+	padding-right: 2em;
+	.percentage {
+		display: block;
+		font: bold 18pt Helvetica, Arial, sans-serif;
+		color: #444;
+	}
+	.details {
+		color: #888;
+		font-size: 0.8em;
+	}
+}
+
+.song-pattern {
+	font-weight: bold;
+	&.p1 { color: #ba2; }
+	&.p2 { color: #36c; }
+	&.p3 { color: #d33; }
+}

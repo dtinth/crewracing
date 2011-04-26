@@ -1,0 +1,4 @@
+syntax: glob
+*.swp
+*.swo
+compass/.sass-cache/*

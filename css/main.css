@@ -1,0 +1,113 @@
+/* line 2, ../scss/main.scss */
+body {
+  font: 11pt Verdana, sans-serif;
+  text-align: center;
+}
+
+/* line 7, ../scss/main.scss */
+table, tr, td {
+  font-size: 1em;
+}
+
+/* line 11, ../scss/main.scss */
+table {
+  text-align: left;
+  margin: 0 auto;
+}
+
+/* line 16, ../scss/main.scss */
+.crew {
+  height: 70px;
+}
+
+/* line 20, ../scss/main.scss */
+.crew td {
+  border-bottom: 1px solid #ccc;
+}
+
+/* line 24, ../scss/main.scss */
+.rank {
+  font: bold 20pt Helvetica, Arial, sans-serif;
+  width: 2.5em;
+  text-align: right;
+  padding-right: 1ex;
+  color: #444;
+}
+
+/* line 35, ../scss/main.scss */
+.name {
+  padding-left: 1ex;
+  width: 10em;
+}
+
+/* line 40, ../scss/main.scss */
+.crew-points {
+  display: block;
+  font-size: 0.8em;
+  padding-top: 0.4ex;
+  color: #666;
+}
+
+/* line 47, ../scss/main.scss */
+.no-course {
+  text-align: center;
+}
+
+/* line 51, ../scss/main.scss */
+.song {
+  text-align: center;
+  width: 80px;
+}
+
+/* line 56, ../scss/main.scss */
+.effectors {
+  display: block;
+  font-size: 0.8em;
+  color: #444;
+}
+
+/* line 62, ../scss/main.scss */
+.course-info {
+  padding-left: 1em;
+  padding-right: 0.8em;
+}
+/* line 63, ../scss/main.scss */
+.course-info .song-line {
+  display: block;
+  font-size: 0.8em;
+  margin: 0.5ex 0;
+}
+
+/* line 72, ../scss/main.scss */
+.win-info {
+  text-align: center;
+  padding-right: 2em;
+}
+/* line 75, ../scss/main.scss */
+.win-info .percentage {
+  display: block;
+  font: bold 18pt Helvetica, Arial, sans-serif;
+  color: #444;
+}
+/* line 80, ../scss/main.scss */
+.win-info .details {
+  color: #888;
+  font-size: 0.8em;
+}
+
+/* line 86, ../scss/main.scss */
+.song-pattern {
+  font-weight: bold;
+}
+/* line 88, ../scss/main.scss */
+.song-pattern.p1 {
+  color: #ba2;
+}
+/* line 89, ../scss/main.scss */
+.song-pattern.p2 {
+  color: #36c;
+}
+/* line 90, ../scss/main.scss */
+.song-pattern.p3 {
+  color: #d33;
+}
