@@ -5,18 +5,26 @@
 </head><body>
 
 <script src="script.js"></script>
-<table>
-	<tr class="header">
+<table id="header">
+	<tr>
 		<td class="name">
 			Crewracing
 			<input type="search" id="search" placeholder="search">
 		</td>
-		<td class="update">Last Updated: <span id="updated">[Loading...]</span></td>
+		<td class="update" rowspan="2">
+			Last Updated: <span id="updated">[Loading...]</span>
+		</td>
+	</tr>
+	<tr>
+		<td class="ranking-select">
+			<a href="javascript://" id="mask-live">Live Ranking</a> &bull; <a href="javascript://" id="mask-machine">Machine Ranking</a>
+		</td>
 	</tr>
 </table>
 <div id="main">
 	<div class="loading">Loading Data... HOLD ON A SEC</div>
 </div>
-<script src="http://tnk.dt.in.th/tnk2/data.js"></script>
+<!--script src="http://localhost/~dttvb/tnk2-tmp-data.js"></script-->
+<script src="http://tnk.dt.in.th/tnk2/data.js?dbversion=1"></script>
 
 </body></html>

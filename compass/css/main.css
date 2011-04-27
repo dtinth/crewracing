@@ -2,9 +2,10 @@
 body {
   font: 11pt Verdana, sans-serif;
   text-align: center;
+  margin: 0;
 }
 
-/* line 9, ../scss/main.scss */
+/* line 10, ../scss/main.scss */
 input {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -22,19 +23,19 @@ input {
   padding-left: 2px;
 }
 
-/* line 17, ../scss/main.scss */
+/* line 18, ../scss/main.scss */
 table, tr, td {
   font-size: 1em;
 }
 
-/* line 21, ../scss/main.scss */
+/* line 22, ../scss/main.scss */
 table {
   text-align: left;
   margin: 0 auto;
   width: 840px;
 }
 
-/* line 28, ../scss/main.scss */
+/* line 29, ../scss/main.scss */
 th {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #999999));
   background-image: -webkit-linear-gradient(top, #dddddd, #999999);
@@ -46,60 +47,75 @@ th {
   font: bold 9pt/24px Helvetica, Arial, sans-serif;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-/* line 34, ../scss/main.scss */
+/* line 35, ../scss/main.scss */
 th.last {
   padding-right: 1.4em;
 }
-/* line 37, ../scss/main.scss */
+/* line 38, ../scss/main.scss */
 th[data-sort] {
   cursor: pointer;
 }
-/* line 40, ../scss/main.scss */
+/* line 41, ../scss/main.scss */
 th.sort-ascending, th.sort-descending {
   color: #000;
 }
-/* line 43, ../scss/main.scss */
+/* line 44, ../scss/main.scss */
 th.sort-ascending:after {
   content: "▲";
   color: #777;
 }
-/* line 47, ../scss/main.scss */
+/* line 48, ../scss/main.scss */
 th.sort-descending:after {
   content: "▼";
   color: #777;
 }
 
-/* line 53, ../scss/main.scss */
+/* line 54, ../scss/main.scss */
 .loading {
   padding: 100px 10px;
   font: 25px Georgia, sans-serif;
 }
 
 /* line 59, ../scss/main.scss */
-.header td {
+#header {
+  margin-top: 15px;
+}
+/* line 61, ../scss/main.scss */
+#header td {
   vertical-align: bottom;
-  padding: 10px 1em 10px;
+  padding: 0px 1em 3px;
   font-family: Helvetica, Arial, sans-serif;
+  line-height: 1.6;
   color: #888;
 }
-/* line 65, ../scss/main.scss */
-.header .name {
+/* line 68, ../scss/main.scss */
+#header .name {
   font-weight: bold;
 }
-/* line 68, ../scss/main.scss */
-.header .update {
+/* line 71, ../scss/main.scss */
+#header .update {
   text-align: right;
 }
+/* line 75, ../scss/main.scss */
+#header .ranking-select a {
+  color: #999;
+  text-decoration: none;
+}
+/* line 79, ../scss/main.scss */
+#header .ranking-select a.active {
+  color: #888;
+  font-weight: bold;
+}
 
-/* line 73, ../scss/main.scss */
+/* line 86, ../scss/main.scss */
 .crew {
   height: 70px;
 }
-/* line 75, ../scss/main.scss */
+/* line 88, ../scss/main.scss */
 .crew td {
   border-bottom: 1px solid #ccc;
 }
-/* line 78, ../scss/main.scss */
+/* line 91, ../scss/main.scss */
 .crew .rank {
   font: bold 20pt Helvetica, Arial, sans-serif;
   width: 2.5em;
@@ -107,91 +123,96 @@ th.sort-descending:after {
   padding-right: 1ex;
   color: #444;
 }
-/* line 87, ../scss/main.scss */
+/* line 100, ../scss/main.scss */
 .crew .name {
   padding-left: 1ex;
   width: 10em;
 }
-/* line 90, ../scss/main.scss */
+/* line 103, ../scss/main.scss */
 .crew .name .crew-points {
   display: block;
   font-size: 0.8em;
   padding-top: 0.4ex;
   color: #666;
 }
+/* line 108, ../scss/main.scss */
+.crew .name .crew-points sup {
+  position: relative;
+  top: 3px;
+}
 
-/* line 99, ../scss/main.scss */
+/* line 116, ../scss/main.scss */
 .no-course {
   text-align: center;
   color: #aaa;
 }
 
-/* line 103, ../scss/main.scss */
+/* line 120, ../scss/main.scss */
 .song {
   text-align: center;
   width: 80px;
 }
 
-/* line 107, ../scss/main.scss */
+/* line 124, ../scss/main.scss */
 .effectors {
   display: block;
   font-size: 0.8em;
   color: #444;
 }
 
-/* line 113, ../scss/main.scss */
+/* line 130, ../scss/main.scss */
 .course-info {
   padding-left: 1em;
 }
-/* line 114, ../scss/main.scss */
+/* line 131, ../scss/main.scss */
 .course-info .song-line {
   display: block;
   font-size: 0.8em;
   margin: 0.4ex 0;
   white-space: nowrap;
 }
-/* line 120, ../scss/main.scss */
+/* line 137, ../scss/main.scss */
 .course-info .producer-line {
   font-size: 0.7em;
   color: #555;
 }
 
-/* line 127, ../scss/main.scss */
+/* line 144, ../scss/main.scss */
 .win-info {
   text-align: center;
   padding-left: 1em;
   padding-right: 2em;
 }
-/* line 131, ../scss/main.scss */
+/* line 148, ../scss/main.scss */
 .win-info .percentage {
   display: block;
   font: bold 16pt Helvetica, Arial, sans-serif;
   color: #444;
 }
-/* line 136, ../scss/main.scss */
+/* line 153, ../scss/main.scss */
 .win-info .details, .win-info .producer {
   display: block;
   color: #888;
   font-size: 0.8em;
 }
-/* line 141, ../scss/main.scss */
+/* line 158, ../scss/main.scss */
 .win-info .producer {
   font-size: 0.7em;
 }
 
-/* line 146, ../scss/main.scss */
+/* line 163, ../scss/main.scss */
 .song-pattern {
   font-weight: bold;
 }
-/* line 148, ../scss/main.scss */
+/* line 165, ../scss/main.scss */
 .song-pattern.p1 {
   color: #ba2;
 }
-/* line 149, ../scss/main.scss */
+/* line 166, ../scss/main.scss */
 .song-pattern.p2 {
   color: #36c;
 }
-/* line 150, ../scss/main.scss */
+/* line 167, ../scss/main.scss */
 .song-pattern.p3 {
   color: #d33;
 }

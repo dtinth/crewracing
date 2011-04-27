@@ -1,5 +1,5 @@
 (function() {
-  var Crew, Pattern, Renderer, Search, Song, Trie, app, songmap, sorters;
+  var Crew, Masker, Pattern, Renderer, Search, Song, Trie, app, findMachineRanking, listToMask, processData, songmap, sorters;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   app = {};
   songmap = {
@@ -108,7 +108,7 @@
     };
     return {
       rank: function(a, b) {
-        return a.rank - b.rank;
+        return a.getAppropriateRank() - b.getAppropriateRank();
       },
       name: function(a, b) {
         return compare(a.name.toLowerCase(), b.name.toLowerCase());
@@ -195,6 +195,41 @@
     };
     return Trie;
   })();
+  Masker = (function() {
+    function Masker() {
+      var name, _i, _len, _ref;
+      this.masks = ['live', 'machine'];
+      this.elements = {};
+      _ref = this.masks;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        name = _ref[_i];
+        this.elements[name] = document.getElementById('mask-' + name);
+        this.registerHandler(this.elements[name], name);
+      }
+      this.activeMask = 'machine';
+      this.update();
+    }
+    Masker.prototype.registerHandler = function(el, name) {
+      return el.onclick = __bind(function() {
+        this.setMask(name);
+        return this.update();
+      }, this);
+    };
+    Masker.prototype.setMask = function(activeMask) {
+      this.activeMask = activeMask;
+    };
+    Masker.prototype.update = function() {
+      var name, _i, _len, _ref;
+      _ref = this.masks;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        name = _ref[_i];
+        this.elements[name].className = (name === this.activeMask ? 'active' : 'inactive');
+      }
+      return this.onupdate();
+    };
+    Masker.prototype.onupdate = function() {};
+    return Masker;
+  })();
   Search = (function() {
     function Search() {
       this.all = [];
@@ -219,36 +254,46 @@
       results = this.search();
       return this.onupdate(results);
     };
+    Search.prototype.onupdate = function() {};
     Search.prototype.search = function() {
-      var key, last, list, matches, results, walk, word, _i, _len;
-      last = null;
+      var crew, key, last, list, matches, results, walk, word, _i, _j, _len, _len2, _ref;
+      last = app.data.masks[app.masker.activeMask];
       results = {};
       list = [];
       matches = this.element.value.toLowerCase().match(/\S+/g);
       if (!matches) {
-        return this.all;
-      }
-      walk = function(tree) {
-        var crew, key, _results;
-        if (!tree) {
-          return;
-        }
-        for (key in tree.crews) {
-          crew = tree.crews[key];
-          if (last === null || crew.id in last) {
+        _ref = app.data.crews;
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          crew = _ref[_i];
+          if (crew.id in last) {
             results[crew.id] = crew;
           }
         }
-        _results = [];
-        for (key in tree.data) {
-          _results.push(walk(tree.data[key]));
+      } else {
+        walk = function(tree) {
+          var key, _results;
+          if (!tree) {
+            return;
+          }
+          for (key in tree.crews) {
+            crew = tree.crews[key];
+            if (last === null || crew.id in last) {
+              results[crew.id] = crew;
+            }
+          }
+          _results = [];
+          for (key in tree.data) {
+            _results.push(walk(tree.data[key]));
+          }
+          return _results;
+        };
+        for (_j = 0, _len2 = matches.length; _j < _len2; _j++) {
+          word = matches[_j];
+          walk(this.find(word));
+          last = results;
+          results = {};
         }
-        return _results;
-      };
-      for (_i = 0, _len = matches.length; _i < _len; _i++) {
-        word = matches[_i];
-        walk(this.find(word));
-        last = results;
+        results = last;
       }
       for (key in results) {
         list.push(results[key]);
@@ -300,6 +345,12 @@
       }
       this.addKeywords();
     }
+    Crew.prototype.getAppropriateRank = function() {
+      if (app.masker.activeMask === 'machine') {
+        return this.machineRank;
+      }
+      return this.rank;
+    };
     Crew.prototype.addKeywords = function() {
       var matches, word, _i, _len, _results;
       matches = this.keywords.join(' ').toLowerCase().match(/\S+/g);
@@ -384,7 +435,28 @@
       return html;
     };
     Renderer.prototype.renderCrew = function(crew) {
-      return "<tr class=\"crew\">\n	<td class=\"rank\">" + crew.rank + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
+      return "<tr class=\"crew\">\n	<td class=\"rank\">" + (crew.getAppropriateRank()) + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts" + (this.renderAdditionalRanking(crew)) + "</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
+    };
+    Renderer.prototype.renderAdditionalRanking = function(crew) {
+      var th;
+      if (app.masker.activeMask === "live") {
+        return "";
+      }
+      th = function(num) {
+        var _ref;
+        if ((11 <= (_ref = num % 100) && _ref <= 19)) {
+          return num + '<sup>th</sup>';
+        } else if (num % 10 === 1) {
+          return num + '<sup>st</sup>';
+        } else if (num % 10 === 2) {
+          return num + '<sup>nd</sup>';
+        } else if (num % 10 === 3) {
+          return num + '<sup>rd</sup>';
+        } else {
+          return num + '<sup>th</sup>';
+        }
+      };
+      return " (" + (th(crew.rank)) + ")";
     };
     Renderer.prototype.renderEmblem = function(crew) {
       return "<img\n	src=\"http://images.djmaxcrew.com/Technika2/EN/icon/technika2/emblem/pattern/" + crew.emblemPattern.id + ".png\"\n	style=\"background:url(http://images.djmaxcrew.com/Technika2/EN/icon/technika2/emblem/plate/" + crew.emblemPlate.id + ".png\"\n	width=\"30\" height=\"30\">";
@@ -413,9 +485,42 @@
     };
     return Renderer;
   })();
-  window.gotData = function(x) {
-    var crewData;
-    app.search = new Search;
+  findMachineRanking = function(list) {
+    var i, _ref, _results;
+    list = list.slice();
+    list.sort(function(a, b) {
+      var i, _ref;
+      for (i = 0, _ref = Math.min(a.previousRanks.length, b.previousRanks.length); (0 <= _ref ? i < _ref : i > _ref); (0 <= _ref ? i += 1 : i -= 1)) {
+        if (a.previousRanks[i] === 0 || !a.course) {
+          return 1;
+        }
+        if (b.previousRanks[i] === 0 || !b.course) {
+          return -1;
+        }
+        if (a.previousRanks[i] !== b.previousRanks[i]) {
+          return a.previousRanks[i] - b.previousRanks[i];
+        }
+      }
+      return 0;
+    });
+    _results = [];
+    for (i = 0, _ref = list.length; (0 <= _ref ? i < _ref : i > _ref); (0 <= _ref ? i += 1 : i -= 1)) {
+      _results.push(list[i].machineRank = i + 1);
+    }
+    return _results;
+  };
+  listToMask = function(list) {
+    var item, mask, _i, _len;
+    mask = {};
+    for (_i = 0, _len = list.length; _i < _len; _i++) {
+      item = list[_i];
+      mask[item.id] = item;
+    }
+    console.log(mask);
+    return mask;
+  };
+  processData = function(x) {
+    var crew, crewData;
     x.crews = (function() {
       var _i, _len, _ref, _results;
       _ref = x.crews;
@@ -426,9 +531,39 @@
       }
       return _results;
     })();
-    app.data = x;
+    findMachineRanking(x.crews);
+    x.masks = {};
+    x.masks.live = listToMask((function() {
+      var _i, _len, _ref, _results;
+      _ref = x.crews;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        crew = _ref[_i];
+        if (crew.rank <= 90) {
+          _results.push(crew);
+        }
+      }
+      return _results;
+    })());
+    x.masks.machine = listToMask((function() {
+      var _i, _len, _ref, _results;
+      _ref = x.crews;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        crew = _ref[_i];
+        if (crew.machineRank <= 90) {
+          _results.push(crew);
+        }
+      }
+      return _results;
+    })());
+    return x;
+  };
+  window.gotData = function(x) {
+    app.masker = new Masker;
+    app.search = new Search;
+    app.data = processData(x);
     app.renderer = new Renderer;
-    app.search.all = x.crews;
     return app.search.update();
   };
 }).call(this);

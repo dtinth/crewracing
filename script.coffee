@@ -96,7 +96,7 @@ sorters = do ->
 		else
 			titleCompare
 
-	rank: (a, b) -> a.rank - b.rank
+	rank: (a, b) -> a.getAppropriateRank() - b.getAppropriateRank()
 	name: (a, b) -> compare a.name.toLowerCase(), b.name.toLowerCase()
 	stage1: stcompare 0
 	stage2: stcompare 1
@@ -159,13 +159,37 @@ class Trie
 			@data[id] = new Trie
 		return @data[id]
 
+class Masker
+
+	constructor: ->
+		@masks = ['live', 'machine']
+		@elements = {}
+		for name in @masks
+			@elements[name] = document.getElementById('mask-' + name)
+			@registerHandler @elements[name], name
+		@activeMask = 'machine'
+		@update()
+	
+	registerHandler: (el, name) ->
+		el.onclick = =>
+			@setMask name
+			@update()
+
+	setMask: (@activeMask) ->
+	update: ->
+		for name in @masks
+			@elements[name].className = (if name == @activeMask then 'active' else 'inactive')
+		@onupdate()
+
+	onupdate: ->
+
 class Search
 
 	constructor: ->
 		@all = []
 		@root = new Trie
 		@setupElements()
-	
+
 	setupElements: ->
 		@element = document.getElementById 'search'
 		@timer = 0
@@ -178,25 +202,32 @@ class Search
 		results = @search()
 		@onupdate results
 
+	onupdate: ->
+
 	search: ->
-		last = null
+		last = app.data.masks[app.masker.activeMask]
 		results = {}
 		list = []
 		matches = @element.value.toLowerCase().match(/\S+/g)
 		if not matches
-			return @all
-		walk = (tree) ->
-			if not tree
-				return
-			for key of tree.crews
-				crew = tree.crews[key]
-				if last is null or crew.id of last
+			for crew in app.data.crews
+				if crew.id of last
 					results[crew.id] = crew
-			for key of tree.data
-				walk tree.data[key]
-		for word in matches
-			walk @find word
-			last = results
+		else
+			walk = (tree) ->
+				if not tree
+					return
+				for key of tree.crews
+					crew = tree.crews[key]
+					if last is null or crew.id of last
+						results[crew.id] = crew
+				for key of tree.data
+					walk tree.data[key]
+			for word in matches
+				walk @find word
+				last = results
+				results = {}
+			results = last
 		for key of results
 			list.push results[key]
 		list
@@ -233,7 +264,11 @@ class Crew
 				stage.pattern = Pattern.getPattern stage.pattern
 				@keywords.push stage.pattern.title
 		@addKeywords()
-	
+
+	getAppropriateRank: ->
+		return @machineRank if app.masker.activeMask == 'machine'
+		return @rank
+
 	addKeywords: ->
 		matches = @keywords.join(' ').toLowerCase().match(/\S+/g)
 		if matches
@@ -310,16 +345,31 @@ class Renderer
 	renderCrew: (crew) ->
 		"""
 			<tr class="crew">
-				<td class="rank">#{crew.rank}.</td>
+				<td class="rank">#{crew.getAppropriateRank()}.</td>
 				<td class="emblem">#{@renderEmblem(crew)}</td>
 				<td class="name">
 					<span class="crew-name">#{crew.name}</span>
-					<span class="crew-points">#{crew.points} pts</span>
+					<span class="crew-points">#{crew.points} pts#{@renderAdditionalRanking(crew)}</span>
 				</td>
 				#{@renderCourse(crew.course)}
 			</tr>
 		"""
 	
+	renderAdditionalRanking: (crew) ->
+		return "" if app.masker.activeMask == "live"
+		th = (num) ->
+			if 11 <= num % 100 <= 19
+				num + '<sup>th</sup>'
+			else if num % 10 == 1
+				num + '<sup>st</sup>'
+			else if num % 10 == 2
+				num + '<sup>nd</sup>'
+			else if num % 10 == 3
+				num + '<sup>rd</sup>'
+			else
+				num + '<sup>th</sup>'
+		""" (#{th(crew.rank)})"""
+
 	renderEmblem: (crew) ->
 		"""
 			<img
@@ -373,11 +423,39 @@ class Renderer
 			<span class="song-name">#{stage.pattern.song.title}</span> <span class="song-pattern p#{stage.pattern.level}">#{stage.pattern.levelName}</span>
 		"""
 
-window.gotData = (x) ->
-	app.search = new Search
+findMachineRanking = (list) ->
+	list = list.slice()
+	list.sort (a, b) ->
+		for i in [0...Math.min(a.previousRanks.length, b.previousRanks.length)]
+			if a.previousRanks[i] == 0 or not a.course
+				return 1
+			if b.previousRanks[i] == 0 or not b.course
+				return -1
+			if a.previousRanks[i] != b.previousRanks[i]
+				return a.previousRanks[i] - b.previousRanks[i]
+		return 0
+	for i in [0...list.length]
+		list[i].machineRank = i + 1
+
+listToMask = (list) ->
+	mask = {}
+	for item in list
+		mask[item.id] = item
+	console.log mask
+	return mask
+
+processData = (x) ->
 	x.crews = (new Crew crewData for crewData in x.crews)
-	app.data = x
+	findMachineRanking x.crews
+	x.masks = {}
+	x.masks.live = listToMask(crew for crew in x.crews when crew.rank <= 90)
+	x.masks.machine = listToMask(crew for crew in x.crews when crew.machineRank <= 90)
+	return x
+
+window.gotData = (x) ->
+	app.masker = new Masker
+	app.search = new Search
+	app.data = processData x
 	app.renderer = new Renderer
-	app.search.all = x.crews
 	app.search.update()
 

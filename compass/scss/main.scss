@@ -4,6 +4,7 @@
 body {
 	font: 11pt Verdana, sans-serif;
 	text-align: center;
+	margin: 0;
 }
 
 input {
@@ -55,11 +56,13 @@ th {
 	font: 25px Georgia, sans-serif;
 }
 
-.header {
+#header {
+	margin-top: 15px;
 	td {
 		vertical-align: bottom;
-		padding: 10px 1em 10px;
+		padding: 0px 1em 3px;
 		font-family: Helvetica, Arial, sans-serif;
+		line-height: 1.6;
 		color: #888;
 	}
 	.name {
@@ -67,6 +70,16 @@ th {
 	}
 	.update {
 		text-align: right;
+	}
+	.ranking-select {
+		a {
+			color: #999;
+			text-decoration: none;
+		}
+		a.active {
+			color: #888;
+			font-weight: bold;
+		}
 	}
 }
 
@@ -92,6 +105,10 @@ th {
 			font-size: 0.8em;
 			padding-top: 0.4ex;
 			color: #666;
+			sup {
+				position: relative;
+				top: 3px;
+			}
 		}
 	}
 }
