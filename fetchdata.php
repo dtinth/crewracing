@@ -51,6 +51,7 @@ class EmblemPattern {
 class CrewListLoader {
 	
 	var $url;
+	var $round = 0;
 
 	function __construct($url) {
 		$this->url = $url;
@@ -114,10 +115,15 @@ class CrewListLoader {
 		$this->data = file_get_contents($this->url);
 		$this->doc = new DOMDocument;
 		@$this->doc->loadHTML($this->data);
-		
+
 		$query = '//table[@width=725]//table[@width=661]//table[@width=661][.//table[@width=661]]//tr[@onmouseover]';
 		$this->xp = new DOMXPath($this->doc);
 		
+		$round = $this->xp->query('//table[@width=661]//td[@height=50]/span/strong/text()');
+		if ($round->length > 0) {
+			$this->round = intval($round->item(0)->nodeValue);
+		}
+
 		$list = $this->xp->query($query);
 		foreach ($list as $node) {
 			$crew = $this->crewFromElement($node);
@@ -137,6 +143,7 @@ $crews = array();
 $prefix = 'http://www.djmaxcrew.com/crewrace/crewrace_ing.asp?page=';
 
 $stderr = @fopen('php://stderr', 'w');
+$round = 0;
 for ($page = 1; $page < 50; $page ++) {
 	$url = $prefix . $page;
 	if ($stderr) {
@@ -146,10 +153,13 @@ for ($page = 1; $page < 50; $page ++) {
 	if ($loader->load($crews, $page > 3) == 0) {
 		fprintf($stderr, "No more pages!\n");
 		break;
+	} else if ($loader->round) {
+		$round = $loader->round;
 	}
 }
 
 echo json_encode(array(
 	'updated' => time(),
-	'crews' => $crews
+	'crews' => $crews,
+	'round' => $round,
 ));
