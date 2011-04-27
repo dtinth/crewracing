@@ -1,7 +1,7 @@
 [Crewracing](http://dtinth.github.com/crewracing/) (Server-Side Part)
 ==================================================
 
-This PHP script fetches the current ranking from the crew race and echo out the JSON data suitable for the client.
+This PHP script fetches the current ranking from the crew race and echo out the JSON data suitable for the [client](https://github.com/dtinth/crewracing).
 
 It's just JSON, and to make it work with the client, must be wrapped in a function call `gotData(json data here);`. You can do so by
 
