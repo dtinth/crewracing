@@ -1,5 +1,5 @@
 (function() {
-  var Crew, Masker, Pattern, Renderer, Search, Song, Trie, app, findMachineRanking, listToMask, processData, songmap, sorters;
+  var Crew, Masker, Pattern, Renderer, Search, Song, Trie, app, findMachineRanking, listToMask, processData, songmap, sorters, th;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   app = {};
   songmap = {
@@ -78,59 +78,114 @@
     'jupiter': 'Jupiter Driving',
     'xlasher': 'Xlasher'
   };
+  th = function(num) {
+    var _ref;
+    if ((11 <= (_ref = num % 100) && _ref <= 19)) {
+      return num + '<sup>th</sup>';
+    } else if (num % 10 === 1) {
+      return num + '<sup>st</sup>';
+    } else if (num % 10 === 2) {
+      return num + '<sup>nd</sup>';
+    } else if (num % 10 === 3) {
+      return num + '<sup>rd</sup>';
+    } else {
+      return num + '<sup>th</sup>';
+    }
+  };
   sorters = (function() {
-    var compare, stcompare;
-    compare = function(a, b) {
+    var cmp, compare, namecompare, rankcompare, require, requirecourse, stagecompare, winratecompare;
+    cmp = function(a, b, cont) {
+      if (cont == null) {
+        cont = function() {
+          return 0;
+        };
+      }
       if (a > b) {
         return 1;
       } else if (a < b) {
         return -1;
       } else {
-        return 0;
+        return cont();
       }
     };
-    stcompare = function(num) {
-      return function(a, b) {
-        var titleCompare;
-        if (!(b.course != null)) {
-          return -1;
-        }
-        if (!(a.course != null)) {
-          return 1;
-        }
-        titleCompare = compare(a.course.stages[num].pattern.song.title, b.course.stages[num].pattern.song.title);
-        if (titleCompare === 0) {
-          return compare(a.course.stages[num].pattern.id, b.course.stages[num].pattern.id);
-        } else {
-          return titleCompare;
-        }
+    compare = function(func) {
+      return function(a, b, cont) {
+        return cmp(func.call(a), func.call(b), cont);
       };
     };
+    require = function(func) {
+      return function(a, b, cont) {
+        var ares, bres;
+        ares = func.call(a);
+        bres = func.call(b);
+        if (!ares && !bres) {
+          return 0;
+        }
+        if (!ares) {
+          return 1;
+        }
+        if (!bres) {
+          return -1;
+        }
+        return cont();
+      };
+    };
+    rankcompare = function(a, b) {
+      return compare(function() {
+        return this.getAppropriateRank();
+      })(a, b);
+    };
+    namecompare = function(a, b) {
+      return compare(function() {
+        return this.name.toLowerCase();
+      })(a, b);
+    };
+    requirecourse = function(a, b, cont) {
+      return require(function() {
+        return this.course != null;
+      })(a, b, function() {
+        return cont();
+      });
+    };
+    stagecompare = function(num) {
+      return function(a, b) {
+        return requirecourse(a, b, function() {
+          return compare(function() {
+            return this.course.stages[num].pattern.song.title;
+          })(a, b, function() {
+            return compare(function() {
+              return this.course.stages[num].pattern.id;
+            })(a, b, function() {
+              return namecompare(a, b);
+            });
+          });
+        });
+      };
+    };
+    winratecompare = function(a, b) {
+      return requirecourse(a, b, function() {
+        return require(function() {
+          return this.course.plays > 0;
+        })(a, b, function() {
+          return compare(function() {
+            return -1 * this.course.wins / this.course.plays;
+          })(a, b, function() {
+            return compare(function() {
+              return -1 * this.course.plays;
+            })(a, b, function() {
+              return rankcompare(a, b);
+            });
+          });
+        });
+      });
+    };
     return {
-      rank: function(a, b) {
-        return a.getAppropriateRank() - b.getAppropriateRank();
-      },
-      name: function(a, b) {
-        return compare(a.name.toLowerCase(), b.name.toLowerCase());
-      },
-      stage1: stcompare(0),
-      stage2: stcompare(1),
-      stage3: stcompare(2),
-      winrate: function(a, b) {
-        if (!(b.course != null)) {
-          return -1;
-        }
-        if (!(a.course != null)) {
-          return 1;
-        }
-        if (b.course.plays === 0) {
-          return -1;
-        }
-        if (a.course.plays === 0) {
-          return 1;
-        }
-        return -1 * compare(a.course.wins / a.course.plays, b.course.wins / b.course.plays);
-      }
+      rank: rankcompare,
+      name: namecompare,
+      stage1: stagecompare(0),
+      stage2: stagecompare(1),
+      stage3: stagecompare(2),
+      winrate: winratecompare
     };
   })();
   Song = (function() {
@@ -232,7 +287,7 @@
   })();
   Search = (function() {
     function Search() {
-      this.all = [];
+      this.limit = 90;
       this.root = new Trie;
       this.setupElements();
     }
@@ -248,28 +303,47 @@
       this.element.onchange = __bind(function() {
         return this.update();
       }, this);
-      return app.masker.onupdate = __bind(function() {
+      app.masker.onupdate = __bind(function() {
         return this.update();
       }, this);
+      this.filtLink = document.getElementById('filter-link');
+      this.filtCheck = document.getElementById('filter-checkmark');
+      return this.filtLink.onclick = __bind(function() {
+        return this.toggleLimit();
+      }, this);
+    };
+    Search.prototype.toggleLimit = function() {
+      if (this.limit === Infinity) {
+        this.limit = 90;
+      } else {
+        this.limit = Infinity;
+      }
+      return this.update();
     };
     Search.prototype.update = function() {
       var results;
+      this.filtCheck.className = this.limit === Infinity ? "checked" : "unchecked";
       results = this.search();
       return this.onupdate(results);
     };
     Search.prototype.onupdate = function() {};
     Search.prototype.search = function() {
-      var crew, key, last, list, matches, results, walk, word, _i, _j, _len, _len2, _ref;
+      var addCrew, crew, key, last, list, matches, results, walk, word, _i, _j, _len, _len2, _ref;
       last = app.data.masks[app.masker.activeMask];
       results = {};
       list = [];
       matches = this.element.value.toLowerCase().match(/\S+/g);
+      addCrew = __bind(function(crew) {
+        if (crew.getAppropriateRank() <= this.limit) {
+          return results[crew.id] = crew;
+        }
+      }, this);
       if (!matches) {
         _ref = app.data.crews;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           crew = _ref[_i];
           if (crew.id in last) {
-            results[crew.id] = crew;
+            addCrew(crew);
           }
         }
       } else {
@@ -281,7 +355,7 @@
           for (key in tree.crews) {
             crew = tree.crews[key];
             if (last === null || crew.id in last) {
-              results[crew.id] = crew;
+              addCrew(crew);
             }
           }
           _results = [];
@@ -338,6 +412,7 @@
       }
       this.keywords = [this.name];
       if (this.course != null) {
+        this.course.crew = this;
         this.keywords.push(this.course.producer);
         _ref = this.course.stages;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -444,24 +519,9 @@
       return "<tr class=\"crew\">\n	<td class=\"rank\">" + (crew.getAppropriateRank()) + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts" + (this.renderAdditionalRanking(crew)) + "</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
     };
     Renderer.prototype.renderAdditionalRanking = function(crew) {
-      var th;
       if (app.masker.activeMask === "live") {
         return "";
       }
-      th = function(num) {
-        var _ref;
-        if ((11 <= (_ref = num % 100) && _ref <= 19)) {
-          return num + '<sup>th</sup>';
-        } else if (num % 10 === 1) {
-          return num + '<sup>st</sup>';
-        } else if (num % 10 === 2) {
-          return num + '<sup>nd</sup>';
-        } else if (num % 10 === 3) {
-          return num + '<sup>rd</sup>';
-        } else {
-          return num + '<sup>th</sup>';
-        }
-      };
       return " (" + (th(crew.rank)) + ")";
     };
     Renderer.prototype.renderEmblem = function(crew) {
@@ -471,13 +531,24 @@
       if (!(course != null)) {
         return "<td colspan=\"5\" class=\"no-course\">(No Course)</td>";
       }
-      return "<td class=\"song\">" + (this.renderStageSong(course.stages[0])) + "</td>\n<td class=\"song\">" + (this.renderStageSong(course.stages[1])) + "</td>\n<td class=\"song\">" + (this.renderStageSong(course.stages[2])) + "</td>\n<td class=\"course-info\">\n	<span class=\"song-line\">" + (this.renderStageInfo(course.stages[0])) + "</span>\n	<span class=\"song-line\">" + (this.renderStageInfo(course.stages[1])) + "</span>\n	<span class=\"song-line\">" + (this.renderStageInfo(course.stages[2])) + "</span>\n</td>\n<td class=\"win-info\">\n	<span class=\"percentage\">" + (this.renderCoursePercentage(course)) + "</span>\n	<span class=\"details\">\n		" + course.wins + " / " + course.plays + "\n	</span>\n	<span title=\"Producer\" class=\"producer\">" + course.producer + "</span>\n</td>";
+      return "<td class=\"song\">" + (this.renderStageSong(course.stages[0])) + "</td>\n<td class=\"song\">" + (this.renderStageSong(course.stages[1])) + "</td>\n<td class=\"song\">" + (this.renderStageSong(course.stages[2])) + "</td>\n<td class=\"course-info\">\n	<span class=\"song-line\">" + (this.renderStageInfo(course.stages[0])) + "</span>\n	<span class=\"song-line\">" + (this.renderStageInfo(course.stages[1])) + "</span>\n	<span class=\"song-line\">" + (this.renderStageInfo(course.stages[2])) + "</span>\n</td>\n<td class=\"win-info\">\n	<span class=\"percentage\">" + (this.renderCoursePercentage(course)) + "</span>\n	<span class=\"details\">" + (this.renderWinRateDetails(course)) + "</span>\n	<span title=\"Producer\" class=\"producer\">" + course.producer + "</span>\n</td>";
     };
     Renderer.prototype.renderCoursePercentage = function(course) {
-      if (course.plays === 0) {
-        return "N/A";
+      if (course.crew.machineRank > 90 && course.plays === 0) {
+        return "<span class=\"na-unranked\">&times;</span>";
+      } else if (course.plays === 0) {
+        return "<span class=\"na-noplays\">&mdash;</span>";
       } else {
         return "" + (Math.round(course.wins / course.plays * 100)) + "%";
+      }
+    };
+    Renderer.prototype.renderWinRateDetails = function(course) {
+      if (course.crew.machineRank > 90 && course.plays === 0) {
+        return "Unranked";
+      } else if (course.plays === 0) {
+        return "No plays";
+      } else {
+        return "" + course.wins + " / " + course.plays;
       }
     };
     Renderer.prototype.renderStageSong = function(stage) {
@@ -544,9 +615,7 @@
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         crew = _ref[_i];
-        if (crew.rank <= 90) {
-          _results.push(crew);
-        }
+        _results.push(crew);
       }
       return _results;
     })());
@@ -556,7 +625,7 @@
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         crew = _ref[_i];
-        if (crew.machineRank <= 90) {
+        if (crew.course != null) {
           _results.push(crew);
         }
       }
@@ -569,6 +638,7 @@
     app.search = new Search;
     app.data = processData(x);
     app.renderer = new Renderer;
-    return app.search.update();
+    app.search.update();
+    return document.getElementById('round').innerHTML = th(x.round);
   };
 }).call(this);

@@ -1,23 +1,27 @@
 <!DOCTYPE html><html><head><meta charset=utf-8>
 <meta http-equiv=Content-Type content="text/html;charset=utf-8">
 <title>Better Crew List!</title>
-<link rel=stylesheet href="compass/css/main.css">
+<link rel=stylesheet href="compass/css/main.css?r=17">
 </head><body>
 
-<script src="script.js"></script>
+<script src="script.js?r=17"></script>
 <table id="header">
 	<tr>
 		<td class="name">
-			Crewracing
+			<b>Crewracing</b>
 			<input type="search" id="search" placeholder="search">
 		</td>
-		<td class="update" rowspan="2">
-			Last Updated: <span id="updated">[Loading...]</span>
+		<td class="week">
+			<a href="javascript://" id="filter-link">[<span id="filter-checkmark" class="unchecked">&#x2714;</span>] show all ranks</a>
+			- <b><span id="round">n<sup>th</sup></span> round</b>
 		</td>
 	</tr>
 	<tr>
 		<td class="ranking-select">
 			<a href="javascript://" id="mask-live">Live Ranking</a> &bull; <a href="javascript://" id="mask-machine">Machine Ranking</a>
+		</td>
+		<td class="update">
+			Updated: <span id="updated">[Loading...]</span>
 		</td>
 	</tr>
 </table>
@@ -25,6 +29,6 @@
 	<div class="loading">Loading Data... HOLD ON A SEC</div>
 </div>
 <!--script src="http://localhost/~dttvb/tnk2-tmp-data.js"></script-->
-<script src="http://tnk.dt.in.th/tnk2/data.js?dbversion=1"></script>
+<script src="http://tnk.dt.in.th/tnk2/data.js?dbversion=2"></script>
 
 </body></html>

@@ -3,9 +3,10 @@ body {
   font: 11pt Verdana, sans-serif;
   text-align: center;
   margin: 0;
+  padding-bottom: 20px;
 }
 
-/* line 10, ../scss/main.scss */
+/* line 11, ../scss/main.scss */
 input {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -23,19 +24,19 @@ input {
   padding-left: 2px;
 }
 
-/* line 18, ../scss/main.scss */
+/* line 19, ../scss/main.scss */
 table, tr, td {
   font-size: 1em;
 }
 
-/* line 22, ../scss/main.scss */
+/* line 23, ../scss/main.scss */
 table {
   text-align: left;
   margin: 0 auto;
   width: 840px;
 }
 
-/* line 29, ../scss/main.scss */
+/* line 30, ../scss/main.scss */
 th {
   background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #dddddd), color-stop(100%, #999999));
   background-image: -webkit-linear-gradient(top, #dddddd, #999999);
@@ -47,40 +48,40 @@ th {
   font: bold 9pt/24px Helvetica, Arial, sans-serif;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-/* line 35, ../scss/main.scss */
+/* line 36, ../scss/main.scss */
 th.last {
   padding-right: 1.4em;
 }
-/* line 38, ../scss/main.scss */
+/* line 39, ../scss/main.scss */
 th[data-sort] {
   cursor: pointer;
 }
-/* line 41, ../scss/main.scss */
+/* line 42, ../scss/main.scss */
 th.sort-ascending, th.sort-descending {
   color: #000;
 }
-/* line 44, ../scss/main.scss */
+/* line 45, ../scss/main.scss */
 th.sort-ascending:after {
   content: "▲";
   color: #777;
 }
-/* line 48, ../scss/main.scss */
+/* line 49, ../scss/main.scss */
 th.sort-descending:after {
   content: "▼";
   color: #777;
 }
 
-/* line 54, ../scss/main.scss */
+/* line 55, ../scss/main.scss */
 .loading {
   padding: 100px 10px;
   font: 25px Georgia, sans-serif;
 }
 
-/* line 59, ../scss/main.scss */
+/* line 60, ../scss/main.scss */
 #header {
   margin-top: 15px;
 }
-/* line 61, ../scss/main.scss */
+/* line 62, ../scss/main.scss */
 #header td {
   vertical-align: bottom;
   padding: 0px 1em 3px;
@@ -88,44 +89,53 @@ th.sort-descending:after {
   line-height: 1.6;
   color: #888;
 }
-/* line 68, ../scss/main.scss */
-#header .name {
-  font-weight: bold;
-}
-/* line 71, ../scss/main.scss */
-#header .update {
+/* line 69, ../scss/main.scss */
+#header .update, #header .week {
   text-align: right;
 }
-/* line 75, ../scss/main.scss */
-#header .ranking-select a {
-  color: #999;
-  text-decoration: none;
+/* line 73, ../scss/main.scss */
+#header .week sup {
+  position: relative;
+  top: 3px;
 }
 /* line 79, ../scss/main.scss */
+#header .name b {
+  color: #333;
+}
+/* line 83, ../scss/main.scss */
+#header a {
+  color: #aaa;
+  text-decoration: none;
+}
+/* line 87, ../scss/main.scss */
+#header .unchecked {
+  visibility: hidden;
+}
+/* line 91, ../scss/main.scss */
 #header .ranking-select a.active {
   color: #888;
   font-weight: bold;
 }
 
-/* line 86, ../scss/main.scss */
+/* line 98, ../scss/main.scss */
 .no-matches {
   height: 150px;
 }
-/* line 88, ../scss/main.scss */
+/* line 100, ../scss/main.scss */
 .no-matches td {
   border-bottom: 1px solid #ccc;
   text-align: center;
 }
 
-/* line 94, ../scss/main.scss */
+/* line 106, ../scss/main.scss */
 .crew {
   height: 70px;
 }
-/* line 96, ../scss/main.scss */
+/* line 108, ../scss/main.scss */
 .crew td {
   border-bottom: 1px solid #ccc;
 }
-/* line 99, ../scss/main.scss */
+/* line 111, ../scss/main.scss */
 .crew .rank {
   font: bold 20pt Helvetica, Arial, sans-serif;
   width: 2.5em;
@@ -133,96 +143,104 @@ th.sort-descending:after {
   padding-right: 1ex;
   color: #444;
 }
-/* line 108, ../scss/main.scss */
+/* line 120, ../scss/main.scss */
 .crew .name {
   padding-left: 1ex;
   width: 10em;
 }
-/* line 111, ../scss/main.scss */
+/* line 123, ../scss/main.scss */
 .crew .name .crew-points {
   display: block;
   font-size: 0.8em;
   padding-top: 0.4ex;
   color: #666;
 }
-/* line 116, ../scss/main.scss */
+/* line 128, ../scss/main.scss */
 .crew .name .crew-points sup {
   position: relative;
   top: 3px;
 }
 
-/* line 124, ../scss/main.scss */
+/* line 136, ../scss/main.scss */
 .no-course {
   text-align: center;
   color: #aaa;
 }
 
-/* line 128, ../scss/main.scss */
+/* line 140, ../scss/main.scss */
 .song {
   text-align: center;
   width: 80px;
 }
 
-/* line 132, ../scss/main.scss */
+/* line 144, ../scss/main.scss */
 .effectors {
   display: block;
   font-size: 0.8em;
   color: #444;
 }
 
-/* line 138, ../scss/main.scss */
+/* line 150, ../scss/main.scss */
 .course-info {
   padding-left: 1em;
 }
-/* line 139, ../scss/main.scss */
+/* line 151, ../scss/main.scss */
 .course-info .song-line {
   display: block;
   font-size: 0.8em;
   margin: 0.4ex 0;
   white-space: nowrap;
 }
-/* line 145, ../scss/main.scss */
+/* line 157, ../scss/main.scss */
 .course-info .producer-line {
   font-size: 0.7em;
   color: #555;
 }
 
-/* line 152, ../scss/main.scss */
+/* line 164, ../scss/main.scss */
 .win-info {
   text-align: center;
   padding-left: 1em;
   padding-right: 2em;
 }
-/* line 156, ../scss/main.scss */
+/* line 168, ../scss/main.scss */
 .win-info .percentage {
   display: block;
   font: bold 16pt Helvetica, Arial, sans-serif;
   color: #444;
 }
-/* line 161, ../scss/main.scss */
+/* line 172, ../scss/main.scss */
+.win-info .percentage .na-noplays {
+  color: #66a;
+}
+/* line 175, ../scss/main.scss */
+.win-info .percentage .na-unranked {
+  color: #a66;
+}
+/* line 179, ../scss/main.scss */
 .win-info .details, .win-info .producer {
   display: block;
   color: #888;
   font-size: 0.8em;
 }
-/* line 166, ../scss/main.scss */
+/* line 184, ../scss/main.scss */
 .win-info .producer {
   font-size: 0.7em;
 }
 
-/* line 171, ../scss/main.scss */
+/* line 189, ../scss/main.scss */
 .song-pattern {
   font-weight: bold;
 }
-/* line 173, ../scss/main.scss */
+/* line 191, ../scss/main.scss */
 .song-pattern.p1 {
   color: #ba2;
 }
-/* line 174, ../scss/main.scss */
+/* line 192, ../scss/main.scss */
 .song-pattern.p2 {
   color: #36c;
 }
-/* line 175, ../scss/main.scss */
+/* line 193, ../scss/main.scss */
 .song-pattern.p3 {
   color: #d33;
 }

@@ -5,6 +5,7 @@ body {
 	font: 11pt Verdana, sans-serif;
 	text-align: center;
 	margin: 0;
+	padding-bottom: 20px;
 }
 
 input {
@@ -65,17 +66,28 @@ th {
 		line-height: 1.6;
 		color: #888;
 	}
-	.name {
-		font-weight: bold;
-	}
-	.update {
+	.update, .week {
 		text-align: right;
 	}
-	.ranking-select {
-		a {
-			color: #999;
-			text-decoration: none;
+	.week {
+		sup {
+			position: relative;
+			top: 3px;
 		}
+	}
+	.name {
+		b {
+			color: #333;
+		}
+	}
+	a {
+		color: #aaa;
+		text-decoration: none;
+	}
+	.unchecked {
+		visibility: hidden;
+	}
+	.ranking-select {
 		a.active {
 			color: #888;
 			font-weight: bold;
@@ -157,6 +169,12 @@ th {
 		display: block;
 		font: bold 16pt Helvetica, Arial, sans-serif;
 		color: #444;
+		.na-noplays {
+			color: #66a;
+		}
+		.na-unranked {
+			color: #a66;
+		}
 	}
 	.details, .producer {
 		display: block;

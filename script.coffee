@@ -77,36 +77,62 @@ songmap =
 	'jupiter': 'Jupiter Driving'
 	'xlasher': 'Xlasher'
 
+th = (num) ->
+	if 11 <= num % 100 <= 19
+		num + '<sup>th</sup>'
+	else if num % 10 == 1
+		num + '<sup>st</sup>'
+	else if num % 10 == 2
+		num + '<sup>nd</sup>'
+	else if num % 10 == 3
+		num + '<sup>rd</sup>'
+	else
+		num + '<sup>th</sup>'
+
 sorters = do ->
 
-	compare = (a, b) ->
+	cmp = (a, b, cont = -> 0) ->
 		if a > b
 			1
 		else if a < b
 			-1
 		else
-			0
+			cont()
 
-	stcompare = (num) -> (a, b) ->
-		return -1 if not b.course?
-		return 1 if not a.course?
-		titleCompare = compare a.course.stages[num].pattern.song.title, b.course.stages[num].pattern.song.title
-		if titleCompare == 0
-			compare a.course.stages[num].pattern.id, b.course.stages[num].pattern.id
-		else
-			titleCompare
+	compare = (func) -> (a, b, cont) ->
+		cmp func.call(a), func.call(b), cont
 
-	rank: (a, b) -> a.getAppropriateRank() - b.getAppropriateRank()
-	name: (a, b) -> compare a.name.toLowerCase(), b.name.toLowerCase()
-	stage1: stcompare 0
-	stage2: stcompare 1
-	stage3: stcompare 2
-	winrate: (a, b) ->
-		return -1 if not b.course?
-		return 1 if not a.course?
-		return -1 if b.course.plays == 0
-		return 1 if a.course.plays == 0
-		-1 * compare a.course.wins / a.course.plays, b.course.wins / b.course.plays
+	require = (func) -> (a, b, cont) ->
+		ares = func.call(a)
+		bres = func.call(b)
+		return 0 if not ares and not bres
+		return 1 if not ares
+		return -1 if not bres
+		cont()
+
+	rankcompare = (a, b) -> compare(-> @getAppropriateRank()) a, b
+	namecompare = (a, b) -> compare(-> @name.toLowerCase()) a, b
+	requirecourse = (a, b, cont) ->
+		require(-> @course?) a, b, ->
+			cont()
+	stagecompare = (num) -> (a, b) ->
+		requirecourse a, b, ->
+			compare(-> @course.stages[num].pattern.song.title) a, b, ->
+				compare(-> @course.stages[num].pattern.id) a, b, ->
+					namecompare a, b
+	winratecompare = (a, b) ->
+		requirecourse a, b, ->
+			require(-> @course.plays > 0) a, b, ->
+				compare(-> -1 * @course.wins / @course.plays) a, b, ->
+					compare(-> -1 * @course.plays) a, b, ->
+						rankcompare a, b
+
+	rank: rankcompare
+	name: namecompare
+	stage1: stagecompare 0
+	stage2: stagecompare 1
+	stage3: stagecompare 2
+	winrate: winratecompare
 
 class Song
 
@@ -186,11 +212,12 @@ class Masker
 class Search
 
 	constructor: ->
-		@all = []
+		@limit = 90
 		@root = new Trie
 		@setupElements()
 
 	setupElements: ->
+		
 		@element = document.getElementById 'search'
 		@timer = 0
 		@element.onkeyup = =>
@@ -198,8 +225,20 @@ class Search
 			@timer = setTimeout (=> @update()), 0
 		@element.onchange = => @update()
 		app.masker.onupdate = => @update()
-	
+
+		@filtLink  = document.getElementById 'filter-link'
+		@filtCheck = document.getElementById 'filter-checkmark'
+		@filtLink.onclick = => @toggleLimit()
+
+	toggleLimit: ->
+		if @limit == Infinity
+			@limit = 90
+		else
+			@limit = Infinity
+		@update()
+
 	update: ->
+		@filtCheck.className = if @limit == Infinity then "checked" else "unchecked"
 		results = @search()
 		@onupdate results
 
@@ -210,10 +249,13 @@ class Search
 		results = {}
 		list = []
 		matches = @element.value.toLowerCase().match(/\S+/g)
+		addCrew = (crew) =>
+			if crew.getAppropriateRank() <= @limit
+				results[crew.id] = crew
 		if not matches
 			for crew in app.data.crews
 				if crew.id of last
-					results[crew.id] = crew
+					addCrew crew
 		else
 			walk = (tree) ->
 				if not tree
@@ -221,7 +263,7 @@ class Search
 				for key of tree.crews
 					crew = tree.crews[key]
 					if last is null or crew.id of last
-						results[crew.id] = crew
+						addCrew crew
 				for key of tree.data
 					walk tree.data[key]
 			for word in matches
@@ -260,6 +302,7 @@ class Crew
 			@[key] = obj[key]
 		@keywords = [@name]
 		if @course?
+			@course.crew = @
 			@keywords.push @course.producer
 			for stage in @course.stages
 				stage.pattern = Pattern.getPattern stage.pattern
@@ -364,17 +407,6 @@ class Renderer
 	
 	renderAdditionalRanking: (crew) ->
 		return "" if app.masker.activeMask == "live"
-		th = (num) ->
-			if 11 <= num % 100 <= 19
-				num + '<sup>th</sup>'
-			else if num % 10 == 1
-				num + '<sup>st</sup>'
-			else if num % 10 == 2
-				num + '<sup>nd</sup>'
-			else if num % 10 == 3
-				num + '<sup>rd</sup>'
-			else
-				num + '<sup>th</sup>'
 		""" (#{th(crew.rank)})"""
 
 	renderEmblem: (crew) ->
@@ -399,19 +431,27 @@ class Renderer
 			</td>
 			<td class="win-info">
 				<span class="percentage">#{@renderCoursePercentage(course)}</span>
-				<span class="details">
-					#{course.wins} / #{course.plays}
-				</span>
+				<span class="details">#{@renderWinRateDetails(course)}</span>
 				<span title="Producer" class="producer">#{course.producer}</span>
 			</td>
 		"""
 	
 	renderCoursePercentage: (course) ->
-		if course.plays is 0
-			"N/A"
+		if course.crew.machineRank > 90 and course.plays == 0
+			"""<span class="na-unranked">&times;</span>"""
+		else if course.plays == 0
+			"""<span class="na-noplays">&mdash;</span>"""
 		else
 			"#{Math.round(course.wins / course.plays * 100)}%"
 	
+	renderWinRateDetails: (course) ->
+		if course.crew.machineRank > 90 and course.plays == 0
+			"Unranked"
+		else if course.plays == 0
+			"No plays"
+		else
+			"#{course.wins} / #{course.plays}"
+
 	renderStageSong: (stage) ->
 		"""
 			<img src="http://images.djmaxcrew.com/Technika2/EN/icon/technika2/disc_s/#{stage.pattern.id}.png">
@@ -454,8 +494,8 @@ processData = (x) ->
 	x.crews = (new Crew crewData for crewData in x.crews)
 	findMachineRanking x.crews
 	x.masks = {}
-	x.masks.live = listToMask(crew for crew in x.crews when crew.rank <= 90)
-	x.masks.machine = listToMask(crew for crew in x.crews when crew.machineRank <= 90)
+	x.masks.live = listToMask(crew for crew in x.crews)
+	x.masks.machine = listToMask(crew for crew in x.crews when crew.course?)
 	return x
 
 window.gotData = (x) ->
@@ -464,4 +504,5 @@ window.gotData = (x) ->
 	app.data = processData x
 	app.renderer = new Renderer
 	app.search.update()
+	document.getElementById('round').innerHTML = th x.round
 
