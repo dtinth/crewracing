@@ -83,6 +83,14 @@ th {
 	}
 }
 
+.no-matches {
+	height: 150px;
+	td {
+		border-bottom: 1px solid #ccc;
+		text-align: center;
+	}
+}
+
 .crew {
 	height: 70px;
 	td {

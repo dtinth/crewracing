@@ -197,6 +197,7 @@ class Search
 			clearTimeout @timer
 			@timer = setTimeout (=> @update()), 0
 		@element.onchange = => @update()
+		app.masker.onupdate = => @update()
 	
 	update: ->
 		results = @search()
@@ -338,6 +339,12 @@ class Renderer
 			"sort-none"
 
 	renderCrews: ->
+		if @crews.length == 0
+			return """
+				<tr class="no-matches">
+					<td colspan="8">No matches!</td>
+				</tr>
+			"""
 		html = ''
 		html += @renderCrew(crew) for crew in @crews
 		html
@@ -441,7 +448,6 @@ listToMask = (list) ->
 	mask = {}
 	for item in list
 		mask[item.id] = item
-	console.log mask
 	return mask
 
 processData = (x) ->

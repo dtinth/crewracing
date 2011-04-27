@@ -245,7 +245,10 @@
           return this.update();
         }, this)), 0);
       }, this);
-      return this.element.onchange = __bind(function() {
+      this.element.onchange = __bind(function() {
+        return this.update();
+      }, this);
+      return app.masker.onupdate = __bind(function() {
         return this.update();
       }, this);
     };
@@ -426,6 +429,9 @@
     };
     Renderer.prototype.renderCrews = function() {
       var crew, html, _i, _len, _ref;
+      if (this.crews.length === 0) {
+        return "<tr class=\"no-matches\">\n	<td colspan=\"8\">No matches!</td>\n</tr>";
+      }
       html = '';
       _ref = this.crews;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -516,7 +522,6 @@
       item = list[_i];
       mask[item.id] = item;
     }
-    console.log(mask);
     return mask;
   };
   processData = function(x) {
