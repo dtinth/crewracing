@@ -76,6 +76,13 @@ songmap =
 	'playthefuture': 'Play The Future'
 	'jupiter': 'Jupiter Driving'
 	'xlasher': 'Xlasher'
+	'masairmx1': 'Masai RMX'
+	'keystothe': 'Keys to the World'
+	'area7': 'Area 7'
+	'burnitdown': 'Burn It Down'
+	'monoxide': 'MonoXide'
+	'getdown': 'Get Down'
+	'theguilty': 'The Guilty'
 
 th = (num) ->
 	if 11 <= num % 100 <= 19
