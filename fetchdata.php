@@ -22,14 +22,6 @@ class Course extends Store {
 class Stage extends Store {
 }
 
-class Song {
-	function __construct($url) {
-		$this->id = basename($url, '.png');
-		$this->songID = strstr($this->id, '_', true);
-		$this->level = intval(substr(strstr($this->id, '_'), 1));
-	}
-}
-
 class Effects {
 	var $fade = '-';
 	var $line = '-';
@@ -80,13 +72,11 @@ class CrewListLoader {
 		$stages = array();
 		for ($i = 0; $i < 3; $i ++) {
 			$stages[] = new Stage(array(
-				'song'    => null,
 				'pattern' => null,
 				'effects' => new Effects,
 			));
 		}
 		foreach ($this->xp->query('.//td[@width=52]/img/@src', $node) as $k => $v) {
-			$stages[$k]->song = new Song($v->nodeValue);
 			$stages[$k]->pattern = basename($v->nodeValue, '.png');
 		}
 		$categories = array('fade', 'line', 'scroll');
