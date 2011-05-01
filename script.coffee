@@ -345,6 +345,7 @@ class Renderer
 	setupHandlers: ->
 		@element.onclick = (e) =>
 			target = e.target
+			target ?= e.srcElement # damn you internet explorer
 			if e.target.hasAttribute 'data-sort'
 				@setSortKey e.target.getAttribute 'data-sort'
 				@render()

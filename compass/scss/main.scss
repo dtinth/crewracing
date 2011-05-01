@@ -28,6 +28,7 @@ table {
 
 
 th {
+	background-color: #B8B8B8;
 	@include background-image(linear-gradient(top, #ddd, #999));
 	text-align: center;
 	color: #444;

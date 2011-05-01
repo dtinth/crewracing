@@ -472,6 +472,7 @@
       return this.element.onclick = __bind(function(e) {
         var target;
         target = e.target;
+        target != null ? target : target = e.srcElement;
         if (e.target.hasAttribute('data-sort')) {
           this.setSortKey(e.target.getAttribute('data-sort'));
           return this.render();
