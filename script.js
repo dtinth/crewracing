@@ -524,7 +524,10 @@
       return html;
     };
     Renderer.prototype.renderCrew = function(crew) {
-      return "<tr class=\"crew\" onclick=\"return true;\">\n	<td class=\"rank\">" + (crew.getAppropriateRank()) + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts" + (this.renderAdditionalRanking(crew)) + "</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
+      return "<tr class=\"" + (this.renderCrewClassName(crew)) + "\" onclick=\"return true;\">\n	<td class=\"rank\">" + (crew.getAppropriateRank()) + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts" + (this.renderAdditionalRanking(crew)) + "</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
+    };
+    Renderer.prototype.renderCrewClassName = function(crew) {
+      return "crew";
     };
     Renderer.prototype.renderAdditionalRanking = function(crew) {
       if (app.masker.activeMask === "live") {

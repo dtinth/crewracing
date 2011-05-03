@@ -161,98 +161,107 @@ th.sort-descending:after {
   position: relative;
   top: 3px;
 }
+/* line 136, ../scss/main.scss */
+.crew.crew-cleared td.rank:before {
+  color: #c22;
+  content: "\2714\A0";
+}
+/* line 140, ../scss/main.scss */
+.crew.crew-cleared .crew-name {
+  text-decoration: line-through;
+}
 
-/* line 137, ../scss/main.scss */
+/* line 146, ../scss/main.scss */
 .no-course {
   text-align: center;
   color: #aaa;
 }
 
-/* line 141, ../scss/main.scss */
+/* line 150, ../scss/main.scss */
 .song {
   text-align: center;
   width: 80px;
 }
 
-/* line 145, ../scss/main.scss */
+/* line 154, ../scss/main.scss */
 .effectors {
   display: block;
   font-size: 0.8em;
   color: #444;
 }
 
-/* line 151, ../scss/main.scss */
+/* line 160, ../scss/main.scss */
 .course-info {
   padding-left: 1em;
 }
-/* line 152, ../scss/main.scss */
+/* line 161, ../scss/main.scss */
 .course-info .song-line {
   display: block;
   font-size: 0.8em;
   margin: 0.4ex 0;
   white-space: nowrap;
 }
-/* line 158, ../scss/main.scss */
+/* line 167, ../scss/main.scss */
 .course-info .producer-line {
   font-size: 0.7em;
   color: #555;
 }
 
-/* line 165, ../scss/main.scss */
+/* line 174, ../scss/main.scss */
 .win-info {
   text-align: center;
   padding-left: 1em;
   padding-right: 2em;
 }
-/* line 169, ../scss/main.scss */
+/* line 178, ../scss/main.scss */
 .win-info .percentage {
   display: block;
   font: bold 16pt Helvetica, Arial, sans-serif;
   color: #444;
 }
-/* line 173, ../scss/main.scss */
+/* line 182, ../scss/main.scss */
 .win-info .percentage .na-noplays {
   color: #66a;
 }
-/* line 176, ../scss/main.scss */
+/* line 185, ../scss/main.scss */
 .win-info .percentage .na-unranked {
   color: #a66;
 }
-/* line 180, ../scss/main.scss */
+/* line 189, ../scss/main.scss */
 .win-info .details, .win-info .producer {
   display: block;
   color: #888;
   font-size: 0.8em;
 }
-/* line 185, ../scss/main.scss */
+/* line 194, ../scss/main.scss */
 .win-info .producer {
   font-size: 0.7em;
 }
 
-/* line 190, ../scss/main.scss */
+/* line 199, ../scss/main.scss */
 .song-pattern {
   font-weight: bold;
 }
-/* line 192, ../scss/main.scss */
+/* line 201, ../scss/main.scss */
 .song-pattern.p1 {
   color: #ba2;
 }
-/* line 193, ../scss/main.scss */
+/* line 202, ../scss/main.scss */
 .song-pattern.p2 {
   color: #36c;
 }
-/* line 194, ../scss/main.scss */
+/* line 203, ../scss/main.scss */
 .song-pattern.p3 {
   color: #d33;
 }
 
-/* line 197, ../scss/main.scss */
+/* line 206, ../scss/main.scss */
 #footer {
   margin-top: 20px;
   font: 12px Verdana, sans-serif;
   color: #aaa;
 }
-/* line 201, ../scss/main.scss */
+/* line 210, ../scss/main.scss */
 #footer a {
   color: #999;
   text-decoration: none;

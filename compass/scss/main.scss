@@ -132,6 +132,15 @@ th {
 			}
 		}
 	}
+	&.crew-cleared {
+		td.rank:before {
+			color: #c22;
+			content: "\2714\A0";
+		}
+		.crew-name {
+			text-decoration: line-through;
+		}
+	}
 }
 
 .no-course {

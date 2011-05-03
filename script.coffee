@@ -402,7 +402,7 @@ class Renderer
 
 	renderCrew: (crew) ->
 		"""
-			<tr class="crew" onclick="return true;">
+			<tr class="#{@renderCrewClassName(crew)}" onclick="return true;">
 				<td class="rank">#{crew.getAppropriateRank()}.</td>
 				<td class="emblem">#{@renderEmblem(crew)}</td>
 				<td class="name">
@@ -413,6 +413,9 @@ class Renderer
 			</tr>
 		"""
 	
+	renderCrewClassName: (crew) ->
+		"crew"
+
 	renderAdditionalRanking: (crew) ->
 		return "" if app.masker.activeMask == "live"
 		""" (#{th(crew.rank)})"""
