@@ -194,3 +194,12 @@ th {
 	&.p3 { color: #d33; }
 }
 
+#footer {
+	margin-top: 20px;
+	font: 12px Verdana, sans-serif;
+	color: #aaa;
+	a {
+		color: #999;
+		text-decoration: none;
+	}
+}

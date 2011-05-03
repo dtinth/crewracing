@@ -245,3 +245,15 @@ th.sort-descending:after {
 .song-pattern.p3 {
   color: #d33;
 }
+
+/* line 197, ../scss/main.scss */
+#footer {
+  margin-top: 20px;
+  font: 12px Verdana, sans-serif;
+  color: #aaa;
+}
+/* line 201, ../scss/main.scss */
+#footer a {
+  color: #999;
+  text-decoration: none;
+}

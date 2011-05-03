@@ -370,13 +370,13 @@ class Renderer
 	renderHeaders: ->
 		"""
 			<tr>
-				<th data-sort="rank" class="#{@sortClass 'rank'}">Rank</th>
-				<th data-sort="name" class="#{@sortClass 'name'}" colspan="2">Name</th>
-				<th data-sort="stage1" class="#{@sortClass 'stage1'}">Stage 1</th>
-				<th data-sort="stage2" class="#{@sortClass 'stage2'}">Stage 2</th>
-				<th data-sort="stage3" class="#{@sortClass 'stage3'}">Stage 3</th>
+				<th onclick="return true;" data-sort="rank" class="#{@sortClass 'rank'}">Rank</th>
+				<th onclick="return true;" data-sort="name" class="#{@sortClass 'name'}" colspan="2">Name</th>
+				<th onclick="return true;" data-sort="stage1" class="#{@sortClass 'stage1'}">Stage 1</th>
+				<th onclick="return true;" data-sort="stage2" class="#{@sortClass 'stage2'}">Stage 2</th>
+				<th onclick="return true;" data-sort="stage3" class="#{@sortClass 'stage3'}">Stage 3</th>
 				<th>Course</th>
-				<th data-sort="winrate" class="#{@sortClass 'winrate'} last">Win Rate</th>
+				<th onclick="return true;" data-sort="winrate" class="#{@sortClass 'winrate'} last">Win Rate</th>
 			</tr>
 		"""
 	
@@ -402,7 +402,7 @@ class Renderer
 
 	renderCrew: (crew) ->
 		"""
-			<tr class="crew">
+			<tr class="crew" onclick="return true;">
 				<td class="rank">#{crew.getAppropriateRank()}.</td>
 				<td class="emblem">#{@renderEmblem(crew)}</td>
 				<td class="name">
