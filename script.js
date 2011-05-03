@@ -411,6 +411,7 @@
   Crew = (function() {
     var nextID;
     nextID = 1;
+    Crew.crews = {};
     function Crew(obj) {
       var key, stage, _i, _len, _ref;
       this.id = nextID++;
@@ -429,7 +430,26 @@
         }
       }
       this.addKeywords();
+      Crew.crews[this.id] = this;
     }
+    Crew.prototype.isCleared = function() {
+      if (typeof localStorage != "undefined" && localStorage !== null) {
+        if (localStorage.getItem != null) {
+          return localStorage.getItem(this.getStorageKey()) === 'yes';
+        }
+      }
+      return false;
+    };
+    Crew.prototype.toggleCleared = function(crew) {
+      if (this.isCleared()) {
+        return localStorage.removeItem(this.getStorageKey());
+      } else {
+        return localStorage.setItem(this.getStorageKey(), 'yes');
+      }
+    };
+    Crew.prototype.getStorageKey = function() {
+      return "cr-week" + app.data.round + "-crew" + (escape(this.name)) + "-cleared";
+    };
     Crew.prototype.getAppropriateRank = function() {
       if (app.masker.activeMask === 'machine') {
         return this.machineRank;
@@ -470,12 +490,17 @@
     };
     Renderer.prototype.setupHandlers = function() {
       return this.element.onclick = __bind(function(e) {
-        var target;
+        var crew, id, target;
         target = e.target;
         target != null ? target : target = e.srcElement;
-        if (e.target.hasAttribute('data-sort')) {
-          this.setSortKey(e.target.getAttribute('data-sort'));
+        if (target.hasAttribute('data-sort')) {
+          this.setSortKey(target.getAttribute('data-sort'));
           return this.render();
+        } else if (target.hasAttribute('data-crew-toggle')) {
+          id = target.getAttribute('data-crew-toggle');
+          crew = Crew.crews[id];
+          crew.toggleCleared();
+          return target.parentNode.className = this.renderCrewClassName(crew);
         }
       }, this);
     };
@@ -524,10 +549,10 @@
       return html;
     };
     Renderer.prototype.renderCrew = function(crew) {
-      return "<tr class=\"" + (this.renderCrewClassName(crew)) + "\" onclick=\"return true;\">\n	<td class=\"rank\">" + (crew.getAppropriateRank()) + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts" + (this.renderAdditionalRanking(crew)) + "</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
+      return "<tr class=\"" + (this.renderCrewClassName(crew)) + "\">\n	<td title=\"Mark/unmark as cleared.\" class=\"rank\" data-crew-toggle=\"" + crew.id + "\" onclick=\"return true;\">" + (crew.getAppropriateRank()) + ".</td>\n	<td class=\"emblem\">" + (this.renderEmblem(crew)) + "</td>\n	<td class=\"name\">\n		<span class=\"crew-name\">" + crew.name + "</span>\n		<span class=\"crew-points\">" + crew.points + " pts" + (this.renderAdditionalRanking(crew)) + "</span>\n	</td>\n	" + (this.renderCourse(crew.course)) + "\n</tr>";
     };
     Renderer.prototype.renderCrewClassName = function(crew) {
-      return "crew";
+      return "crew" + (crew.isCleared() ? " crew-cleared" : "");
     };
     Renderer.prototype.renderAdditionalRanking = function(crew) {
       if (app.masker.activeMask === "live") {

@@ -115,6 +115,7 @@ th {
 		text-align: right;
 		padding-right: 1ex;
 		color: #444;
+		cursor: pointer;
 	}
 	.emblem {
 	}
@@ -136,9 +137,6 @@ th {
 		td.rank:before {
 			color: #c22;
 			content: "\2714\A0";
-		}
-		.crew-name {
-			text-decoration: line-through;
 		}
 	}
 }

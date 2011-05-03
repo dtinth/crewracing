@@ -303,6 +303,8 @@ class Crew
 
 	nextID = 1
 
+	@crews = {}
+
 	constructor: (obj) ->
 		@id = nextID++
 		for key of obj
@@ -315,6 +317,22 @@ class Crew
 				stage.pattern = Pattern.getPattern stage.pattern
 				@keywords.push stage.pattern.title
 		@addKeywords()
+		Crew.crews[@id] = @
+
+	isCleared: ->
+		if localStorage?
+			if localStorage.getItem?
+				return localStorage.getItem(@getStorageKey()) == 'yes'
+		false
+	
+	toggleCleared: (crew) ->
+		if @isCleared()
+			localStorage.removeItem(@getStorageKey())
+		else
+			localStorage.setItem(@getStorageKey(), 'yes')
+
+	getStorageKey: ->
+		"cr-week#{app.data.round}-crew#{escape(@name)}-cleared"
 
 	getAppropriateRank: ->
 		return @machineRank if app.masker.activeMask == 'machine'
@@ -346,9 +364,15 @@ class Renderer
 		@element.onclick = (e) =>
 			target = e.target
 			target ?= e.srcElement # damn you internet explorer
-			if e.target.hasAttribute 'data-sort'
-				@setSortKey e.target.getAttribute 'data-sort'
+			if target.hasAttribute 'data-sort'
+				@setSortKey target.getAttribute 'data-sort'
 				@render()
+			else if target.hasAttribute 'data-crew-toggle'
+				id = target.getAttribute 'data-crew-toggle'
+				crew = Crew.crews[id]
+				crew.toggleCleared()
+				target.parentNode.className = @renderCrewClassName(crew)
+
 
 	setSortKey: (key) ->
 		if key == @sortKey
@@ -402,8 +426,8 @@ class Renderer
 
 	renderCrew: (crew) ->
 		"""
-			<tr class="#{@renderCrewClassName(crew)}" onclick="return true;">
-				<td class="rank">#{crew.getAppropriateRank()}.</td>
+			<tr class="#{@renderCrewClassName(crew)}">
+				<td title="Mark/unmark as cleared." class="rank" data-crew-toggle="#{crew.id}" onclick="return true;">#{crew.getAppropriateRank()}.</td>
 				<td class="emblem">#{@renderEmblem(crew)}</td>
 				<td class="name">
 					<span class="crew-name">#{crew.name}</span>
@@ -414,7 +438,7 @@ class Renderer
 		"""
 	
 	renderCrewClassName: (crew) ->
-		"crew"
+		"crew" + (if crew.isCleared() then " crew-cleared" else "")
 
 	renderAdditionalRanking: (crew) ->
 		return "" if app.masker.activeMask == "live"
