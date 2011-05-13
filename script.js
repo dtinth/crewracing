@@ -26,6 +26,10 @@
     'divineservice': 'Divine Service',
     'sin': 'SIN',
     'blythe': 'BlythE',
+    'pdm': 'PDM',
+    'firstkiss': 'First Kiss',
+    'putemup': 'Put Em Up',
+    '@gobaek1': 'PFW',
     '@gobaek2': 'PFW2',
     'heartofwitch': 'Heart of Witch',
     'brandnewdays': 'Brand New Days',
@@ -301,13 +305,18 @@
     Search.prototype.setupElements = function() {
       this.element = document.getElementById('search');
       this.timer = 0;
-      this.element.onkeyup = __bind(function() {
+      this.element.onkeyup = __bind(function(e) {
+        e != null ? e : e = window.event;
         clearTimeout(this.timer);
+        if (e.keyCode === 13) {
+          this.setHash();
+        }
         return this.timer = setTimeout((__bind(function() {
           return this.update();
         }, this)), 0);
       }, this);
       this.element.onchange = __bind(function() {
+        this.setHash();
         return this.update();
       }, this);
       app.masker.onupdate = __bind(function() {
@@ -315,9 +324,40 @@
       }, this);
       this.filtLink = document.getElementById('filter-link');
       this.filtCheck = document.getElementById('filter-checkmark');
-      return this.filtLink.onclick = __bind(function() {
+      this.filtLink.onclick = __bind(function() {
         return this.toggleLimit();
       }, this);
+      this.hash = '\0';
+      if ("onhashchange" in window) {
+        window.onhashchange = __bind(function() {
+          return setTimeout((__bind(function() {
+            return this.checkHash();
+          }, this)), 1);
+        }, this);
+      } else {
+        setInterval((__bind(function() {
+          return this.checkHash();
+        }, this)), 1000);
+      }
+      return setTimeout((__bind(function() {
+        return this.checkHash();
+      }, this)), 100);
+    };
+    Search.prototype.checkHash = function() {
+      var decoded, m;
+      if (location.hash !== this.hash) {
+        this.hash = location.hash;
+        if (m = this.hash.match(/(^#?|&)q=([^&]+)/)) {
+          decoded = decodeURIComponent(m[2]);
+          if (this.element.value !== decoded) {
+            this.element.value = decoded;
+            return this.update();
+          }
+        }
+      }
+    };
+    Search.prototype.setHash = function() {
+      return location.hash = "#q=" + (encodeURIComponent(this.element.value));
     };
     Search.prototype.toggleLimit = function() {
       if (this.limit === Infinity) {
@@ -457,8 +497,13 @@
       return this.rank;
     };
     Crew.prototype.addKeywords = function() {
-      var matches, word, _i, _len, _results;
-      matches = this.keywords.join(' ').toLowerCase().match(/\S+/g);
+      var lc;
+      lc = this.keywords.join(' ').toLowerCase();
+      this.addKeywordsFromMatches(lc.match(/\S+/g));
+      return this.addKeywordsFromMatches(lc.match(/[a-z0-9]+/g));
+    };
+    Crew.prototype.addKeywordsFromMatches = function(matches) {
+      var word, _i, _len, _results;
       if (matches) {
         _results = [];
         for (_i = 0, _len = matches.length; _i < _len; _i++) {
@@ -491,12 +536,13 @@
     Renderer.prototype.setupHandlers = function() {
       return this.element.onclick = __bind(function(e) {
         var crew, id, target;
+        e != null ? e : e = event;
         target = e.target;
         target != null ? target : target = e.srcElement;
-        if (target.hasAttribute('data-sort')) {
+        if ((target.getAttribute('data-sort')) != null) {
           this.setSortKey(target.getAttribute('data-sort'));
           return this.render();
-        } else if (target.hasAttribute('data-crew-toggle')) {
+        } else if ((target.getAttribute('data-crew-toggle')) != null) {
           id = target.getAttribute('data-crew-toggle');
           crew = Crew.crews[id];
           crew.toggleCleared();

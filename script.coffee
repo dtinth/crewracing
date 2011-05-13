@@ -25,6 +25,10 @@ songmap =
 	'divineservice': 'Divine Service'
 	'sin': 'SIN'
 	'blythe': 'BlythE'
+	'pdm': 'PDM'
+	'firstkiss': 'First Kiss'
+	'putemup': 'Put Em Up'
+	'@gobaek1': 'PFW'
 	'@gobaek2': 'PFW2'
 	'heartofwitch': 'Heart of Witch'
 	'brandnewdays': 'Brand New Days'
@@ -227,15 +231,39 @@ class Search
 		
 		@element = document.getElementById 'search'
 		@timer = 0
-		@element.onkeyup = =>
+		@element.onkeyup = (e) =>
+			e ?= window.event
 			clearTimeout @timer
+			if e.keyCode == 13
+				@setHash()
 			@timer = setTimeout (=> @update()), 0
-		@element.onchange = => @update()
+		@element.onchange = => @setHash(); @update()
 		app.masker.onupdate = => @update()
 
 		@filtLink  = document.getElementById 'filter-link'
 		@filtCheck = document.getElementById 'filter-checkmark'
 		@filtLink.onclick = => @toggleLimit()
+
+		@hash = '\0'
+
+		if "onhashchange" of window
+			window.onhashchange = =>
+				setTimeout (=> @checkHash()), 1
+		else
+			setInterval (=> @checkHash()), 1000
+		setTimeout (=> @checkHash()), 100
+
+	checkHash: ->
+		if location.hash != @hash
+			@hash = location.hash
+			if m = @hash.match /(^#?|&)q=([^&]+)/
+				decoded = decodeURIComponent m[2]
+				if @element.value != decoded
+					@element.value = decoded
+					@update()
+
+	setHash: ->
+		location.hash = "#q=#{encodeURIComponent @element.value}"
 
 	toggleLimit: ->
 		if @limit == Infinity
@@ -339,7 +367,11 @@ class Crew
 		return @rank
 
 	addKeywords: ->
-		matches = @keywords.join(' ').toLowerCase().match(/\S+/g)
+		lc = @keywords.join(' ').toLowerCase()
+		@addKeywordsFromMatches lc.match(/\S+/g)
+		@addKeywordsFromMatches lc.match(/[a-z0-9]+/g)
+	
+	addKeywordsFromMatches: (matches) ->
 		if matches
 			for word in matches
 				app.search.index word, @
@@ -362,12 +394,13 @@ class Renderer
 
 	setupHandlers: ->
 		@element.onclick = (e) =>
+			e ?= event # damn you again internet explorer
 			target = e.target
 			target ?= e.srcElement # damn you internet explorer
-			if target.hasAttribute 'data-sort'
+			if (target.getAttribute 'data-sort')?
 				@setSortKey target.getAttribute 'data-sort'
 				@render()
-			else if target.hasAttribute 'data-crew-toggle'
+			else if (target.getAttribute 'data-crew-toggle')?
 				id = target.getAttribute 'data-crew-toggle'
 				crew = Crew.crews[id]
 				crew.toggleCleared()
