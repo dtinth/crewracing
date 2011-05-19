@@ -8,8 +8,19 @@
 data  = require './data'
 ui    = require './ui'
 utils = require './utils'
+hash  = require './hash'
 
 class Application
+
+	class HashChecker
+
+		constructor: (@app) ->
+			hash.onbegin = => @dirty = false
+			hash.listen 'q',     (v) => @app.searchBox.setValue (if v? then v else ""); @dirty = true
+			hash.listen 'sort',  (v) => @app.query.sort = (if data.canSortBy v then v else 'rank'); @dirty = true
+			hash.listen 'desc',  (v) => @app.query.direction = (if v then -1 else 1); @dirty = true
+			hash.listen 'round', (v) => v = parseInt v; @app.switchRound (if 19 <= v <= @app.latestData.db.round then v else @app.latestData.db.round)
+			hash.onend = => @app.update() if @dirty
 
 	constructor: ->
 		@table = new ui.Table
@@ -20,14 +31,15 @@ class Application
 
 		@searchBox = new ui.SearchBox
 		@searchBox.onchange = => @update()
-		@searchBox.onsave = => @saveState()
+		@searchBox.onsave = => hash.set 'q', @searchBox.getValue()
 
 		@rankMode = @_createRankMode()
 		@rankMode.onselect = => @update()
-		# @rankMode.onclick = => @rankMode.select (if @rankMode.getKey() == data.Ranking.MACHINE then data.Ranking.LIVE else data.Ranking.MACHINE); @update()
 
 		@updatedText = document.getElementById 'updated-text'
 		@query = new data.Query
+
+		@hashChecker = new HashChecker @
 
 	_createRankMode: ->
 		o = (key, value, disp) -> new ui.DropDown.Option key, value, disp
@@ -37,11 +49,10 @@ class Application
 		]
 		return new ui.DropDown options, data.Ranking.MACHINE, 'Ranking Mode', document.getElementById 'mode-switch'
 
-	saveState: ->
-		# unimplemented!
-
 	sortBy: (key) ->
 		@query.sortBy key
+		hash.set 'sort', @query.sort
+		if @query.direction > 0 then hash.del 'desc' else hash.set 'desc', true
 		@update()
 
 	load: (json) ->
@@ -53,15 +64,22 @@ class Application
 			@latestData = @data
 			@roundSwitch = @_createRoundSwitch()
 			@roundSwitch.onvalidate = (opt, cont) =>
-				@switchRound opt.key, => cont true
+				round = parseInt opt.key
+				if round == @latestData.db.round
+					hash.del 'round'
+				else
+					hash.set 'round', round
+				@switchRound round, cont
+			hash.start()
 		@roundSwitch.select @data.db.round
 		if @switchRound.cont
-			@switchRound.cont()
+			@switchRound.cont true
 			delete @switchRound.cont
 		@updatedText.innerHTML = @data.db.updated
 		@update()
 	
 	switchRound: (round, cont) ->
+		cont false if @switchRound.cont
 		@switchRound.cont = cont
 		if round != @latestData.db.round
 			js = document.createElement 'script'

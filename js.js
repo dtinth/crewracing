@@ -27,12 +27,44 @@ var Crewracing = (function() {
 	};
 })()(
 { name: "./main", factory: function(require, exports, module) {
-var Application, application, data, ui, utils;
+var Application, application, data, hash, ui, utils;
 var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 data = require('./data');
 ui = require('./ui');
 utils = require('./utils');
+hash = require('./hash');
 Application = (function() {
+  var HashChecker;
+  HashChecker = (function() {
+    function HashChecker(app) {
+      this.app = app;
+      hash.onbegin = __bind(function() {
+        return this.dirty = false;
+      }, this);
+      hash.listen('q', __bind(function(v) {
+        this.app.searchBox.setValue((v != null ? v : ""));
+        return this.dirty = true;
+      }, this));
+      hash.listen('sort', __bind(function(v) {
+        this.app.query.sort = (data.canSortBy(v) ? v : 'rank');
+        return this.dirty = true;
+      }, this));
+      hash.listen('desc', __bind(function(v) {
+        this.app.query.direction = (v ? -1 : 1);
+        return this.dirty = true;
+      }, this));
+      hash.listen('round', __bind(function(v) {
+        v = parseInt(v);
+        return this.app.switchRound(((19 <= v && v <= this.app.latestData.db.round) ? v : this.app.latestData.db.round));
+      }, this));
+      hash.onend = __bind(function() {
+        if (this.dirty) {
+          return this.app.update();
+        }
+      }, this);
+    }
+    return HashChecker;
+  })();
   function Application() {
     this.table = new ui.Table;
     this.table.onsort = __bind(function(key) {
@@ -47,7 +79,7 @@ Application = (function() {
       return this.update();
     }, this);
     this.searchBox.onsave = __bind(function() {
-      return this.saveState();
+      return hash.set('q', this.searchBox.getValue());
     }, this);
     this.rankMode = this._createRankMode();
     this.rankMode.onselect = __bind(function() {
@@ -55,6 +87,7 @@ Application = (function() {
     }, this);
     this.updatedText = document.getElementById('updated-text');
     this.query = new data.Query;
+    this.hashChecker = new HashChecker(this);
   }
   Application.prototype._createRankMode = function() {
     var o, options;
@@ -64,9 +97,14 @@ Application = (function() {
     options = [o(data.Ranking.LIVE, 'Live Ranking', 'Live'), o(data.Ranking.MACHINE, 'Machine Ranking', 'Machine')];
     return new ui.DropDown(options, data.Ranking.MACHINE, 'Ranking Mode', document.getElementById('mode-switch'));
   };
-  Application.prototype.saveState = function() {};
   Application.prototype.sortBy = function(key) {
     this.query.sortBy(key);
+    hash.set('sort', this.query.sort);
+    if (this.query.direction > 0) {
+      hash.del('desc');
+    } else {
+      hash.set('desc', true);
+    }
     return this.update();
   };
   Application.prototype.load = function(json) {
@@ -78,14 +116,20 @@ Application = (function() {
       this.latestData = this.data;
       this.roundSwitch = this._createRoundSwitch();
       this.roundSwitch.onvalidate = __bind(function(opt, cont) {
-        return this.switchRound(opt.key, __bind(function() {
-          return cont(true);
-        }, this));
+        var round;
+        round = parseInt(opt.key);
+        if (round === this.latestData.db.round) {
+          hash.del('round');
+        } else {
+          hash.set('round', round);
+        }
+        return this.switchRound(round, cont);
       }, this);
+      hash.start();
     }
     this.roundSwitch.select(this.data.db.round);
     if (this.switchRound.cont) {
-      this.switchRound.cont();
+      this.switchRound.cont(true);
       delete this.switchRound.cont;
     }
     this.updatedText.innerHTML = this.data.db.updated;
@@ -93,6 +137,9 @@ Application = (function() {
   };
   Application.prototype.switchRound = function(round, cont) {
     var js;
+    if (this.switchRound.cont) {
+      cont(false);
+    }
     this.switchRound.cont = cont;
     if (round !== this.latestData.db.round) {
       js = document.createElement('script');
@@ -355,6 +402,9 @@ exports.SearchBox = SearchBox = (function() {
   }
   SearchBox.prototype.getValue = function() {
     return this.element.value;
+  };
+  SearchBox.prototype.setValue = function(v) {
+    return this.element.value = v;
   };
   SearchBox.prototype.change = function() {
     return this.onchange();
@@ -732,6 +782,9 @@ sorters = (function() {
     winrate: winratecompare
   };
 })();
+exports.canSortBy = function(key) {
+  return sorters.hasOwnProperty(key);
+};
 exports.Database = Database = (function() {
   var db;
   db = require('./db');
@@ -1076,6 +1129,131 @@ exports.createMask = function(cont) {
   });
   return obj;
 };
+} },
+{ name: "./hash", factory: function(require, exports, module) {
+var HashChecker;
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+HashChecker = (function() {
+  var HashListener;
+  HashListener = (function() {
+    function HashListener(main, name, onchange) {
+      this.main = main;
+      this.name = name;
+      this.onchange = onchange;
+      this.value = null;
+    }
+    HashListener.prototype.check = function() {
+      var v;
+      v = this.get();
+      if (v === this.value) {
+        return;
+      }
+      this.value = v;
+      return this.onchange(this.value);
+    };
+    HashListener.prototype.get = function() {
+      return this.main.get(this.name);
+    };
+    HashListener.prototype.set = function(v) {
+      return this.main.set(this.name, v);
+    };
+    HashListener.prototype.del = function() {
+      return this.main.del(this.name);
+    };
+    return HashListener;
+  })();
+  function HashChecker() {
+    this.initialized = false;
+    this.listeners = {};
+  }
+  HashChecker.prototype.start = function() {
+    if (this.initialized) {
+      return;
+    }
+    this.hash = '';
+    this.hashObj = {};
+    if ("onhashchange" in window) {
+      window.onhashchange = __bind(function() {
+        return setTimeout((__bind(function() {
+          return this.checkHash();
+        }, this)), 1);
+      }, this);
+    } else {
+      setInterval((__bind(function() {
+        return this.checkHash();
+      }, this)), 500);
+    }
+    setTimeout((__bind(function() {
+      return this.checkHash();
+    }, this)), 100);
+    return this.initialized = true;
+  };
+  HashChecker.prototype.listen = function(name, listener) {
+    return this.listeners[name] = new HashListener(this, name, listener);
+  };
+  HashChecker.prototype.get = function(name) {
+    return this.hashObj[name];
+  };
+  HashChecker.prototype.set = function(name, value) {
+    this.hashObj[name] = value;
+    if (this.listeners[name]) {
+      this.listeners[name].value = value;
+    }
+    return this.update();
+  };
+  HashChecker.prototype.del = function(name) {
+    delete this.hashObj[name];
+    if (this.listeners[name]) {
+      this.listeners[name].value = void 0;
+    }
+    return this.update();
+  };
+  HashChecker.prototype.update = function() {
+    var name, value;
+    return location.hash = this.hash = '#' + ((function() {
+      var _ref, _results;
+      _ref = this.hashObj;
+      _results = [];
+      for (name in _ref) {
+        value = _ref[name];
+        _results.push(encodeURIComponent(name) + (value === true ? "" : "=" + encodeURIComponent(value)));
+      }
+      return _results;
+    }).call(this)).join('&');
+  };
+  HashChecker.prototype.checkHash = function() {
+    var key, listener, pair, position, value, _i, _len, _ref, _ref2;
+    if (location.hash === this.hash) {
+      return;
+    }
+    this.hash = location.hash;
+    this.hashObj = {};
+    _ref = this.hash.replace(/^#/, '').split('&');
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      pair = _ref[_i];
+      key = pair;
+      value = true;
+      position = pair.indexOf('=');
+      if (position > -1) {
+        key = pair.substr(0, position);
+        value = decodeURIComponent(pair.substr(position + 1));
+      }
+      key = decodeURIComponent(key);
+      this.hashObj[key] = value;
+    }
+    this.onbegin();
+    _ref2 = this.listeners;
+    for (key in _ref2) {
+      listener = _ref2[key];
+      listener.check();
+    }
+    return this.onend();
+  };
+  HashChecker.prototype.onbegin = function() {};
+  HashChecker.prototype.onend = function() {};
+  return HashChecker;
+})();
+module.exports = new HashChecker;
 } },
 { name: "./storage", factory: function(require, exports, module) {
 var id;

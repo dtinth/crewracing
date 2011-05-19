@@ -157,6 +157,7 @@ sorters = do ->
 	stage3: stagecompare 2
 	winrate: winratecompare
 
+exports.canSortBy = (key) -> sorters.hasOwnProperty key
 
 exports.Database = class Database
 

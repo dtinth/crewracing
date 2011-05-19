@@ -87,6 +87,7 @@ compiler.addFile 'src/db.coffee'
 compiler.addFile 'src/songdb.coffee'
 compiler.addFile 'src/songmap.coffee'
 compiler.addFile 'src/utils.coffee'
+compiler.addFile 'src/hash.coffee'
 compiler.addFile 'src/storage.coffee'
 
 compiler.watch()

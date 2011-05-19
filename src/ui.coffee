@@ -175,8 +175,8 @@ exports.SearchBox = class SearchBox
 			@change()
 		@element.onchange = => @change(); @save()
 
-	getValue: ->
-		@element.value
+	getValue: -> @element.value
+	setValue: (v) -> @element.value = v
 
 	change: ->
 		@onchange()
