@@ -73,11 +73,10 @@ class Application
 			@loadData()
 
 	_createRoundSwitch: ->
-		@latestRound = @data.db.round
 		o = (key, value, disp) -> new ui.DropDown.Option key, value, disp
 		options = []
 		for round in [19..@data.db.round]
-			options.push o round, "#{utils.th(round)} Crew Race Round", "<span class='round'>Round #{round}</span>#{if round == @latestRound then " (Current)" else " (Archive)"}"
+			options.push o round, "#{utils.th(round)} Crew Race Round", "<span class='round'>Round #{round}</span>#{if round == @latestData.db.round then " (Current)" else " (Archive)"}"
 		return new ui.DropDown options, @data.db.round, '', document.getElementById 'round-switch'
 
 	update: ->

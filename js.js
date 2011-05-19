@@ -103,13 +103,12 @@ require._m("./main", function(require, exports, module) {
     };
     Application.prototype._createRoundSwitch = function() {
       var o, options, round, _ref;
-      this.latestRound = this.data.db.round;
       o = function(key, value, disp) {
         return new ui.DropDown.Option(key, value, disp);
       };
       options = [];
       for (round = 19, _ref = this.data.db.round; 19 <= _ref ? round <= _ref : round >= _ref; 19 <= _ref ? round++ : round--) {
-        options.push(o(round, "" + (utils.th(round)) + " Crew Race Round", "<span class='round'>Round " + round + "</span>" + (round === this.latestRound ? " (Current)" : " (Archive)")));
+        options.push(o(round, "" + (utils.th(round)) + " Crew Race Round", "<span class='round'>Round " + round + "</span>" + (round === this.latestData.db.round ? " (Current)" : " (Archive)")));
       }
       return new ui.DropDown(options, this.data.db.round, '', document.getElementById('round-switch'));
     };
