@@ -16,6 +16,8 @@ CSS file `css/main.css` is generated from SCSS file `scss/main.scss`, using Comp
     cd compass
 	compass watch
 
-JavaScript file `script.js` is generated from CoffeeScript `script.coffee`:
+JavaScript file `js.js` is generated from many `.coffee` files found in `src` dirctory. To compile, run `build.coffee`:
 
-    coffee -c -w script.coffee
+    coffee build.coffee
+
+Some image files are generated from `.coffee` files using [canvasrenderer2](https://github.com/dtinth/canvasrenderer2). See the `images` directory.

@@ -6,6 +6,7 @@ body {
 	text-align: center;
 	margin: 0;
 	padding-bottom: 20px;
+	background: image-url("bg.png") top left repeat-x;
 }
 
 input {
@@ -20,12 +21,184 @@ table, tr, td {
 	font-size: 1em;
 }
 
-table {
+.wrapper {
 	text-align: left;
 	margin: 0 auto;
 	width: 840px;
 }
 
+.head-module {
+	@include inline-block;
+	height: 48px;
+}
+
+
+table {
+	@extend .wrapper;
+}
+
+.checkbox {
+	background: inline-image("checkbox.png") center left no-repeat;
+	color: #888;
+	padding-left: 25px;
+	text-decoration: none;
+	display: block;
+	height: 46px;
+	line-height: 48px;
+}
+
+.checkbox-checked {
+	background: inline-image("checkbox-checked.png") center left no-repeat;
+	color: #444;
+}
+
+@mixin ddcolor($intensity, $activity) {
+	$bs: mix(#c19, (#c19 + #222), $intensity);
+	$base: mix(($bs - #111) * 0.9, $bs, $activity);
+	background: $base;
+	@include background-image(linear-gradient(top, $base + #333, $base));
+	border-color: $base * 0.9;
+}
+
+.dropdown {
+	color: #444;
+	margin-right: -6px;
+	.dropdown-activator {
+		color: #444;
+		text-decoration: none;
+		display: block;
+		height: 46px;
+		line-height: 48px;
+		.label {
+			color: #888;
+		}
+		.sel-opt {
+			.text {
+				background: inline-image("arrow.png") center right no-repeat;
+				padding-right: 20px;
+			}
+			padding-left: 5px; margin-left: -5px;
+			@include inline-block;
+			height: 46px; line-height: 48px; vertical-align: top;
+			position: relative;
+			border: 1px solid transparent;
+		}
+	}
+	position: relative;
+	.dropdown-list {
+		z-index: 4;
+		position: absolute;
+		top: 46px;
+		right: 0;
+		background: #f5f5f5;
+		display: none;
+		margin: 0;
+		padding: 4px 0;
+		border: 1px solid #888;
+		@include box-shadow(0 1px 2px rgba(136,136,136,0.4));
+		li {
+			display: block;
+			list-style: none;
+			a {
+				border: 0 solid #f5f5f5;
+				border-width: 1px 0 1px 0;
+				display: block;
+				color: #333;
+				text-decoration: none;
+				font-size: 0.9em;
+				padding: 0.5ex 1em 0.5ex 0.8em;
+				line-height: normal;
+				white-space: nowrap;
+				&:hover, &:focus {
+					background: mix(#c19, #f5f5f5, 10%);
+				}
+				&:hover:focus {
+					background: mix(#c19, #f5f5f5, 20%);
+				}
+			}
+			&.selected {
+				a {
+					@include ddcolor(50%, 0%);
+					color: #fff;
+					&:focus {
+						@include ddcolor(100%, 0%);
+					}
+					&:active {
+						@include ddcolor(50%, 100%);
+					}
+					&:active:focus {
+						@include ddcolor(100%, 100%);
+					}
+				}
+			}
+		}
+	}
+}
+.dropdown-open {
+	$base: #56585a;
+	.dropdown-activator {
+		.sel-opt {
+			z-index: 3;
+			.text {
+				color: #ddd;
+				text-shadow: 0 -1px 0 rgba(0,0,0,0.4);
+				background: inline-image("arrow-open.png") center right no-repeat;
+			}
+			background: $base;
+			@include background-image(linear-gradient(top, $base, $base + #333));
+		}
+	}
+	.dropdown-list {
+		display: block;
+	}
+}
+.dropdown-working {
+	opacity: 0.7;
+}
+
+#head {
+	@extend .wrapper;
+	height: 48px;
+	margin-bottom: 32px;
+	margin: 0 auto;
+	.left {
+		float: left; height: 48px;
+	}
+	.right {
+		float: right; height: 48px;
+		.head-module {
+			margin-left: 24px;
+		}
+	}
+	font-family: Helvetica, Arial, sans-serif;
+	.title {
+		@extend .head-module;
+		color: #222;
+		line-height: 48px;
+		font-weight: bold;
+		text-shadow: 0 1px 0 rgba(255,255,255,0.7);
+	}
+	.search {
+		@extend .head-module;
+		line-height: 46px;
+		margin-left: 8px;
+		input {
+			border-color: #888;
+			vertical-align: middle;
+			@include box-shadow(0 1px 0 rgba(136,136,136,0.4));
+		}
+	}
+	.limit {
+		@extend .head-module;
+	}
+	.mode-switch {
+		@extend .head-module;
+	}
+	.round-switch {
+		@extend .head-module;
+		.dropdown-activator .text .round { font-weight: bold; }
+	}
+}
 
 th {
 	background-color: #B8B8B8;
@@ -56,6 +229,15 @@ th {
 .loading {
 	padding: 100px 10px;
 	font: 25px Georgia, sans-serif;
+}
+
+#updated {
+	@extend .wrapper;
+	font-family: Helvetica, Arial, sans-serif;
+	text-align: right;
+	color: #888;
+	margin-top: 2em;
+	margin-bottom: 1ex;
 }
 
 #header {
