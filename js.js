@@ -99,7 +99,11 @@ Application = (function() {
   };
   Application.prototype.sortBy = function(key) {
     this.query.sortBy(key);
-    hash.set('sort', this.query.sort);
+    if (key === 'rank') {
+      hash.del('sort');
+    } else {
+      hash.set('sort', this.query.sort);
+    }
     if (this.query.direction > 0) {
       hash.del('desc');
     } else {
@@ -1231,6 +1235,9 @@ HashChecker = (function() {
     _ref = this.hash.replace(/^#/, '').split('&');
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       pair = _ref[_i];
+      if (pair === '') {
+        continue;
+      }
       key = pair;
       value = true;
       position = pair.indexOf('=');
@@ -1239,6 +1246,9 @@ HashChecker = (function() {
         value = decodeURIComponent(pair.substr(position + 1));
       }
       key = decodeURIComponent(key);
+      if (key === '') {
+        continue;
+      }
       this.hashObj[key] = value;
     }
     this.onbegin();

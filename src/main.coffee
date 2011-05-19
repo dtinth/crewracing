@@ -51,7 +51,10 @@ class Application
 
 	sortBy: (key) ->
 		@query.sortBy key
-		hash.set 'sort', @query.sort
+		if key == 'rank'
+			hash.del 'sort'
+		else
+			hash.set 'sort', @query.sort
 		if @query.direction > 0 then hash.del 'desc' else hash.set 'desc', true
 		@update()
 
