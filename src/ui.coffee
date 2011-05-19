@@ -206,6 +206,8 @@ exports.Checkbox = class Checkbox
 		@updateClassName()
 		@ontoggle()
 		return false
+	
+	setChecked: (@checked) -> @updateClassName()
 
 
 exports.Table = class Table

@@ -17,8 +17,10 @@ class Application
 		constructor: (@app) ->
 			hash.onbegin = => @dirty = false
 			hash.listen 'q',     (v) => @app.searchBox.setValue (if v? then v else ""); @dirty = true
-			hash.listen 'sort',  (v) => @app.query.sort = (if data.canSortBy v then v else 'rank'); @dirty = true
-			hash.listen 'desc',  (v) => @app.query.direction = (if v then -1 else 1); @dirty = true
+			hash.listen 'live',  (v) => @app.rankMode.select (if v then data.Ranking.LIVE else data.Ranking.MACHINE); @dirty = true
+			hash.listen 'all',   (v) => @app.showAll.setChecked (if v then true else false); @dirty = true
+			# hash.listen 'sort',  (v) => @app.query.sort = (if data.canSortBy v then v else 'rank'); @dirty = true
+			# hash.listen 'desc',  (v) => @app.query.direction = (if v then -1 else 1); @dirty = true
 			hash.listen 'round', (v) => v = parseInt v; @app.switchRound (if 19 <= v <= @app.latestData.db.round then v else @app.latestData.db.round)
 			hash.onend = => @app.update() if @dirty
 
@@ -27,14 +29,14 @@ class Application
 		@table.onsort = (key) => @sortBy key
 
 		@showAll = new ui.Checkbox 'Show All', document.getElementById 'limit'
-		@showAll.ontoggle = => @update()
+		@showAll.ontoggle = => (if @showAll.checked then hash.set 'all', true else hash.del 'all'); @update()
 
 		@searchBox = new ui.SearchBox
 		@searchBox.onchange = => @update()
 		@searchBox.onsave = => hash.set 'q', @searchBox.getValue()
 
 		@rankMode = @_createRankMode()
-		@rankMode.onselect = => @update()
+		@rankMode.onselect = => (if @rankMode.getKey() == data.Ranking.LIVE then hash.set 'live', true else hash.del 'live'); @update()
 
 		@updatedText = document.getElementById 'updated-text'
 		@query = new data.Query
@@ -51,11 +53,11 @@ class Application
 
 	sortBy: (key) ->
 		@query.sortBy key
-		if key == 'rank'
-			hash.del 'sort'
-		else
-			hash.set 'sort', @query.sort
-		if @query.direction > 0 then hash.del 'desc' else hash.set 'desc', true
+		# if key == 'rank'
+		#	hash.del 'sort'
+		# else
+		#	hash.set 'sort', @query.sort
+		# if @query.direction > 0 then hash.del 'desc' else hash.set 'desc', true
 		@update()
 
 	load: (json) ->

@@ -45,12 +45,12 @@ Application = (function() {
         this.app.searchBox.setValue((v != null ? v : ""));
         return this.dirty = true;
       }, this));
-      hash.listen('sort', __bind(function(v) {
-        this.app.query.sort = (data.canSortBy(v) ? v : 'rank');
+      hash.listen('live', __bind(function(v) {
+        this.app.rankMode.select((v ? data.Ranking.LIVE : data.Ranking.MACHINE));
         return this.dirty = true;
       }, this));
-      hash.listen('desc', __bind(function(v) {
-        this.app.query.direction = (v ? -1 : 1);
+      hash.listen('all', __bind(function(v) {
+        this.app.showAll.setChecked((v ? true : false));
         return this.dirty = true;
       }, this));
       hash.listen('round', __bind(function(v) {
@@ -72,6 +72,11 @@ Application = (function() {
     }, this);
     this.showAll = new ui.Checkbox('Show All', document.getElementById('limit'));
     this.showAll.ontoggle = __bind(function() {
+      if (this.showAll.checked) {
+        hash.set('all', true);
+      } else {
+        hash.del('all');
+      }
       return this.update();
     }, this);
     this.searchBox = new ui.SearchBox;
@@ -83,6 +88,11 @@ Application = (function() {
     }, this);
     this.rankMode = this._createRankMode();
     this.rankMode.onselect = __bind(function() {
+      if (this.rankMode.getKey() === data.Ranking.LIVE) {
+        hash.set('live', true);
+      } else {
+        hash.del('live');
+      }
       return this.update();
     }, this);
     this.updatedText = document.getElementById('updated-text');
@@ -99,16 +109,6 @@ Application = (function() {
   };
   Application.prototype.sortBy = function(key) {
     this.query.sortBy(key);
-    if (key === 'rank') {
-      hash.del('sort');
-    } else {
-      hash.set('sort', this.query.sort);
-    }
-    if (this.query.direction > 0) {
-      hash.del('desc');
-    } else {
-      hash.set('desc', true);
-    }
     return this.update();
   };
   Application.prototype.load = function(json) {
@@ -441,6 +441,10 @@ exports.Checkbox = Checkbox = (function() {
     this.updateClassName();
     this.ontoggle();
     return false;
+  };
+  Checkbox.prototype.setChecked = function(checked) {
+    this.checked = checked;
+    return this.updateClassName();
   };
   return Checkbox;
 })();
