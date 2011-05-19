@@ -50,10 +50,6 @@ require._m("./main", function(require, exports, module) {
       this.rankMode.onselect = __bind(function() {
         return this.update();
       }, this);
-      this.rankMode.onclick = __bind(function() {
-        this.rankMode.select((this.rankMode.getKey() === data.Ranking.MACHINE ? data.Ranking.LIVE : data.Ranking.MACHINE));
-        return this.update();
-      }, this);
       this.updatedText = document.getElementById('updated-text');
       this.query = new data.Query;
     }

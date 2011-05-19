@@ -24,7 +24,7 @@ class Application
 
 		@rankMode = @_createRankMode()
 		@rankMode.onselect = => @update()
-		@rankMode.onclick = => @rankMode.select (if @rankMode.getKey() == data.Ranking.MACHINE then data.Ranking.LIVE else data.Ranking.MACHINE); @update()
+		# @rankMode.onclick = => @rankMode.select (if @rankMode.getKey() == data.Ranking.MACHINE then data.Ranking.LIVE else data.Ranking.MACHINE); @update()
 
 		@updatedText = document.getElementById 'updated-text'
 		@query = new data.Query
