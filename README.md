@@ -21,3 +21,9 @@ JavaScript file `js.js` is generated from many `.coffee` files found in `src` di
     coffee build.coffee
 
 Some image files are generated from `.coffee` files using [canvasrenderer2](https://github.com/dtinth/canvasrenderer2). See the `images` directory.
+
+
+License
+-------
+
+Crewracing is [MIT Licensed](http://www.opensource.org/licenses/mit-license.php).
