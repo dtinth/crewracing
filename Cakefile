@@ -1,5 +1,5 @@
 #
-# build.coffee
+# Cakefile
 #
 # Compiles bunch of coffee files into one JavaScript file.
 #
@@ -77,17 +77,24 @@ class Compiler
 		fs.writeFileSync 'js.js', code
 		console.log ""
 			
+getCompiler = ->
+	compiler = new Compiler
+	compiler.addFile 'src/main.coffee'
+	compiler.addFile 'src/ui.coffee'
+	compiler.addFile 'src/data.coffee'
+	compiler.addFile 'src/db.coffee'
+	compiler.addFile 'src/songdb.coffee'
+	compiler.addFile 'src/songmap.coffee'
+	compiler.addFile 'src/utils.coffee'
+	compiler.addFile 'src/hash.coffee'
+	compiler.addFile 'src/storage.coffee'
+	return compiler
 
-compiler = new Compiler
+task 'compile', 'Compile source code files to js.js once', (options) ->
+	compiler = getCompiler()
+	compiler.compile()
 
-compiler.addFile 'src/main.coffee'
-compiler.addFile 'src/ui.coffee'
-compiler.addFile 'src/data.coffee'
-compiler.addFile 'src/db.coffee'
-compiler.addFile 'src/songdb.coffee'
-compiler.addFile 'src/songmap.coffee'
-compiler.addFile 'src/utils.coffee'
-compiler.addFile 'src/hash.coffee'
-compiler.addFile 'src/storage.coffee'
+task 'watch', 'Watch files for changes, and compile once they have changed', (options) ->
+	compiler = getCompiler()
+	compiler.watch()
 
-compiler.watch()
