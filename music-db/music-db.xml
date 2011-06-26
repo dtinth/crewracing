@@ -1,0 +1,612 @@
+<?xml version="1.0"?>
+<db>
+
+<music id="@gobaek1" title="Proposed, Flower, Wolf Part 1" short="PFW1">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="4"/>
+</music>
+
+<music id="@gobaek2" title="Proposed, Flower, Wolf Part 2" short="PFW2">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="@naege" title="Come to Me">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="@ner" title="To You">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="ai" title="A.I">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="access" title="ACCESS">
+	<chart difficulty="1" level="2"/>
+	<chart difficulty="2" level="3"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="area7" title="Area 7">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="blythe" title="BlythE">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="9"/>
+</music>
+
+<music id="cherokee" title="Cherokee">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="closer" title="Closer">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="5"/>
+</music>
+
+<music id="coastaltempo" title="Coastal Tempo">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="color" title="Color">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="coloursof" title="Colours of Sorrow">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="creator" title="Creator">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+</music>
+
+<music id="dearmylady" title="Dear My Lady">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="divineservice" title="Divine Service">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="electronics" title="Electronics">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+</music>
+
+<music id="endofthemoon" title="End of the Moonlight">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="enemystorm" title="Enemy Storm">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="fate" title="Fate">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="fermion" title="Fermion">
+	<chart difficulty="1" level="8"/>
+	<chart difficulty="2" level="10"/>
+</music>
+
+<music id="firstkiss" title="First Kiss">
+	<chart difficulty="1" level="2"/>
+	<chart difficulty="2" level="4"/>
+	<chart difficulty="3" level="5"/>
+</music>
+
+<music id="flea" title="Flea">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="freedom" title="Freedom">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="fury" title="Fury">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="hereinthe" title="Here in the Moment">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="hexad" title="HEXAD">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="honeymoon" title="Honeymoon">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="4"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="iwantyou" title="I Want You">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="inmyheart" title="In My Heart">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="4"/>
+	<chart difficulty="3" level="5"/>
+</music>
+
+<music id="jupiter" title="Jupiter Driving">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="keystothe" title="Keys to the World">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="ladymade" title="Ladymade Star">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="landscape" title="Landscape">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="lovemode" title="Love Mode">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="lover" title="Lover">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="melody" title="Melody">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="miles" title="Miles">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="oblivion" title="OblivioN">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="pdm" title="PDM">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="playthefuture" title="Play The Future">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="remember" title="Remember">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="shoreline" title="Shoreline">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="sin" title="SIN">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="sonof" title="SON OF SUN">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+	<chart difficulty="3" level="10"/>
+</music>
+
+<music id="stop" title="STOP">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="supersonic" title="SuperSonic">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="sweetshining" title="Sweet Shining Shooting Star" short="SSSS">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="theclear" title="The Clear Blue Sky">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="thelastdance" title="The Last Dance">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="voyage" title="Voyage">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="whiteblue" title="White Blue">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="y" title="Y">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="yourown" title="Your Own Miracle">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="@baramege" title="Ask to Wind">
+	<chart difficulty="1" level="1"/>
+	<chart difficulty="2" level="5"/>
+</music>
+
+<music id="@baramegelive" title="Ask to Wind -Live version-" short="Ask to Wind -Live-">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+</music>
+
+<music id="someday" title="Someday">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="brandnewdays" title="Brand NEW Days">
+	<chart difficulty="1" level="2"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="@piano" title="Piano Concerto No.1">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="eternalmemory" title="Eternal Memory">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="rayof" title="Ray of Illuminati">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="spaceofsoul" title="Space of Soul">
+	<chart difficulty="1" level="8"/>
+	<chart difficulty="2" level="9"/>
+</music>
+
+<music id="heartofwitch" title="Heart of Witch">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="dualstrikers" title="Dual Strikers">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+</music>
+
+<music id="cozyquilt" title="Cozy Quilt">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="8"/>
+</music>
+
+<music id="lacamp" title="La Campanella : Nu Rave">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+</music>
+
+<music id="outlawreborn" title="OUT LAW - Reborn">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="cosmicfantastic" title="Cosmic Fantastic Lovesong">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="puzzler" title="Puzzler">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="7"/>
+</music>
+
+<music id="beeutiful" title="BEE-U-TIFUL">
+	<chart difficulty="1" level="7"/>
+	<chart difficulty="2" level="9"/>
+</music>
+
+<music id="d2" title="D2">
+	<chart difficulty="1" level="8"/>
+	<chart difficulty="2" level="9"/>
+	<chart difficulty="3" level="10"/>
+</music>
+
+<music id="xlasher" title="XLASHER">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+</music>
+
+<music id="sweetdream" title="Sweet Dream">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="putemup" title="Put Em Up">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+</music>
+
+<music id="sayitfrom" title="Say It From Your Heart">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="rage" title="Rage Of Demon">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="9"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="trip" title="Trip">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="monoxide" title="MonoXide">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="supersonicrmx" title="SuperSonic(Mr.Funky Remix)" short="SuperSonic RMX">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="burnitdown" title="Burn It Down">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="theguilty" title="The Guilty">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="airwave" title="Airwave">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="9"/>
+</music>
+
+<music id="eternalfantasy" title="Eternal Fantasy">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="loveis" title="Love is Beautiful">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="5"/>
+	<chart difficulty="3" level="6"/>
+</music>
+
+<music id="dreamofwinds" title="Dream of Winds">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="novarmx" title="Nova(Mr.Funky Remix)" short="Nova RMX">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="thor" title="Thor">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="10"/>
+</music>
+
+<music id="thenightstage" title="The Night Stage">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="beyondthe" title="Beyond The Future">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="@youngwon" title="Forever">
+	<chart difficulty="1" level="4"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="darkenvy" title="Dark Envy">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+</music>
+
+<music id="getdown" title="Get Down">
+	<chart difficulty="1" level="4"/>
+</music>
+
+<music id="rutin" title="Ruti'n">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="secretworld" title="Secret World">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="lovely" title="Lovely Hands">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="jealousy" title="Jealousy">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+</music>
+
+<music id="desperado" title="Desperado">
+	<chart difficulty="1" level="5"/>
+</music>
+
+<music id="inmydream" title="In My Dream">
+	<chart difficulty="1" level="5"/>
+</music>
+
+<music id="grave" title="Grave Consequence">
+	<chart difficulty="1" level="7"/>
+	<chart difficulty="2" level="8"/>
+</music>
+
+<music id="beatudown" title="Beat U Down">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="7"/>
+</music>
+
+<music id="cypher" title="Cypher Gate">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="9"/>
+	<chart difficulty="3" level="10"/>
+</music>
+
+<music id="readynow" title="Ready Now">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="8"/>
+</music>
+
+<music id="djmax" title="DJMAX">
+	<chart difficulty="1" level="3"/>
+	<chart difficulty="2" level="4"/>
+</music>
+
+<music id="luvflowrmx1" title="Luv Flow(Funky House Mix)" short="Luv Flow RMX">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="enemyrmx1" title="Enemy Storm(Dark Jungle Mix)" short="Enemy Storm RMX">
+	<chart difficulty="1" level="6"/>
+	<chart difficulty="2" level="8"/>
+	<chart difficulty="3" level="9"/>
+</music>
+
+<music id="masairmx1" title="MASAI(Electro House Mix)" short="MASAI RMX">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="desperadormx1" title="Desperado(Nu skool Mix)" short="Desperado RMX">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+<music id="zetrmx1" title="Zet(Mr.Funky Remix)" short="Zet RMX">
+	<chart difficulty="1" level="5"/>
+	<chart difficulty="2" level="6"/>
+	<chart difficulty="3" level="7"/>
+</music>
+
+</db>

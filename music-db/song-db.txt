@@ -42,7 +42,7 @@ hd: 7
 mx: 8
 ---
 name: blythe
-title: Blythe
+title: BlythE
 nm: 6
 hd: 9
 ---
@@ -53,7 +53,7 @@ hd: 6
 mx: 7
 ---
 name: closer
-title: CLOSER
+title: Closer
 nm: 3
 hd: 5
 ---
@@ -81,13 +81,13 @@ nm: 6
 hd: 7
 ---
 name: dearmylady
-title: Dear my lady
+title: Dear My Lady
 nm: 4
 hd: 6
 mx: 7
 ---
 name: divineservice
-title: DIVINE SERVICE
+title: Divine Service
 nm: 4
 hd: 5
 mx: 6
@@ -162,7 +162,7 @@ hd: 4
 mx: 8
 ---
 name: iwantyou
-title: I want You
+title: I Want You
 nm: 4
 hd: 6
 mx: 7
@@ -198,7 +198,7 @@ hd: 6
 mx: 9
 ---
 name: lovemode
-title: Love mode
+title: Love Mode
 nm: 3
 hd: 6
 mx: 7
@@ -222,7 +222,7 @@ hd: 6
 mx: 7
 ---
 name: oblivion
-title: OBLIVION
+title: OblivioN
 nm: 3
 hd: 6
 mx: 8
@@ -451,6 +451,7 @@ mx: 8
 ---
 name: supersonicrmx
 title: SuperSonic(Mr.Funky Remix)
+short: SuperSonic RMX
 nm: 6
 hd: 7
 mx: 9
@@ -492,6 +493,7 @@ mx: 9
 ---
 name: novarmx
 title: Nova(Mr.Funky Remix)
+short: Nova RMX
 nm: 4
 hd: 6
 ---
@@ -517,7 +519,7 @@ nm: 4
 hd: 6
 ---
 name: darkenvy
-title: DARK ENVY
+title: Dark Envy
 nm: 6
 hd: 7
 ---
@@ -526,7 +528,7 @@ title: Get Down
 nm: 4
 ---
 name: rutin
-title: Rutin
+title: Ruti'n
 nm: 5
 hd: 6
 ---
@@ -550,7 +552,7 @@ title: Desperado
 nm: 5
 ---
 name: inmydream
-title: In my Dream
+title: In My Dream
 nm: 5
 ---
 name: grave
@@ -582,30 +584,35 @@ hd: 4
 ---
 name: luvflowrmx1
 title: Luv Flow(Funky House Mix)
+short: Luv Flow RMX
 nm: 5
 hd: 6
 mx: 7
 ---
 name: enemyrmx1
 title: Enemy Storm(Dark Jungle Mix)
+short: Enemy Storm RMX
 nm: 6
 hd: 8
 mx: 9
 ---
 name: masairmx1
 title: MASAI(Electro House Mix)
+short: MASAI RMX
 nm: 5
 hd: 6
 mx: 7
 ---
 name: desperadormx1
 title: Desperado(Nu skool Mix)
+short: Desperado RMX
 nm: 5
 hd: 6
 mx: 7
 ---
 name: zetrmx1
 title: Zet(Mr.Funky Remix)
+short: Zet RMX
 nm: 5
 hd: 6
 mx: 7
