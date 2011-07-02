@@ -978,14 +978,35 @@ exports.DB = DB = (function() {
 })();
 } },
 { name: "./songdb", factory: function(require, exports, module) {
-var Pattern, Song, patterns, songs;
+var Pattern, Song, info, patterns, songs;
+info = (function() {
+  var chart, db, map, music, _i, _j, _len, _len2, _ref;
+  db = require('./music-db');
+  map = {
+    song: {},
+    pattern: {}
+  };
+  for (_i = 0, _len = db.length; _i < _len; _i++) {
+    music = db[_i];
+    map.song[music.id] = music;
+    _ref = music.charts;
+    for (_j = 0, _len2 = _ref.length; _j < _len2; _j++) {
+      chart = _ref[_j];
+      map.pattern[music.id + '_' + chart.difficulty] = chart;
+    }
+  }
+  return map;
+})();
 Song = (function() {
-  var songmap;
-  songmap = require('./songmap');
   function Song(id) {
     this.id = id;
-    if (this.id in songmap) {
-      this.title = songmap[this.id];
+    this.info = info.song[this.id];
+    if (this.info) {
+      if (this.info.short) {
+        this.title = this.info.short;
+      } else {
+        this.title = this.info.title;
+      }
     } else {
       this.title = (this.id + '').replace(/^./, function(x) {
         return x.toUpperCase();
@@ -1003,6 +1024,7 @@ Pattern = (function() {
   };
   function Pattern(id) {
     this.id = id;
+    this.info = info.pattern[this.id];
     this.song = exports.song(this.id.replace(/_\d$/, ''));
     this.level = parseInt(this.id.charAt(this.id.length - 1));
     this.levelName = levelmap[this.level];
@@ -1023,95 +1045,6 @@ exports.pattern = function(id) {
     patterns[id] = new Pattern(id);
   }
   return patterns[id];
-};
-} },
-{ name: "./songmap", factory: function(require, exports, module) {
-module.exports = {
-  '@naege': 'Come To Me',
-  '@youngwon': 'Forever',
-  'thor': 'Thor',
-  'ladymade': 'Ladymade Star',
-  'oblivion': 'Oblivion',
-  'cherokee': 'Cherokee',
-  'dreamofwinds': 'Dream of Winds',
-  'cypher': 'Cypher Gate',
-  'd2': 'D2',
-  'whiteblue': 'Whiteblue',
-  'supersonicrmx': 'Supersonic RMX',
-  'rage': 'Rage of Demon',
-  'fermion': 'Fermion',
-  'sweetdream': 'Sweet Dream',
-  'beeutiful': 'BEE-U-TIFUL',
-  'thenightstage': 'The Night Stage',
-  'outlawreborn': 'Out Law -Reborn-',
-  'enemystorm': 'Enemy Storm',
-  'airwave': 'Airwave',
-  'zetrmx1': 'Zet RMX',
-  'divineservice': 'Divine Service',
-  'sin': 'SIN',
-  'blythe': 'BlythE',
-  'pdm': 'PDM',
-  'firstkiss': 'First Kiss',
-  'putemup': 'Put Em Up',
-  '@gobaek1': 'PFW',
-  '@gobaek2': 'PFW2',
-  'heartofwitch': 'Heart of Witch',
-  'brandnewdays': 'Brand New Days',
-  '@baramegelive': 'Ask The Wind Live',
-  '@ner': 'To You',
-  '@piano': 'Piano Concerto No.1',
-  '@baramege': 'Ask The Wind',
-  'iwantyou': 'I Want You',
-  'someday': 'Someday',
-  'cosmicfantastic': 'Cosmic Fantastic',
-  'endofthemoon': 'End of the Moonlight',
-  'oblivion': 'Oblivion',
-  'djmax': 'DJMAX',
-  'flea': 'Flea',
-  'eternalmemory': 'Eternal Memory',
-  'desperadormx1': 'Desperado RMX',
-  'inmyheart': 'In My Heart',
-  'luvflowrmx1': 'Luv Flow RMX',
-  'color': 'Color',
-  'secretworld': 'Secret World',
-  'cozyquilt': 'Cozy Quilt',
-  'rayof': 'Ray of Illuminati',
-  'thelastdance': 'The Last Dance',
-  'eternalfantasy': 'Eternal Fantasy',
-  'loveis': 'Love is Beautiful',
-  'spaceofsoul': 'Space of Soul',
-  'coloursof': 'Colours of Sorrow',
-  'theclear': 'The Clear Blue Sky',
-  'dualstrikers': 'Dual Strikers',
-  'coastaltempo': 'Coastal Tempo',
-  'beyondthe': 'Beyond the Future',
-  'closer': 'Closer',
-  'freedom': 'Freedom',
-  'honeymoon': 'Honeymoon',
-  'sweetshining': 'SSSS',
-  'sayitfrom': 'Say It From Your Heart',
-  'beatudown': 'Beat U Down',
-  'grave': 'Grave Consequence',
-  'showline': 'Shoreline',
-  'novarmx': 'Nova RMX',
-  'sonof': 'Son Of Sun',
-  'miles': 'Miles',
-  'hexad': 'HEXAD',
-  'fate': 'Fate',
-  'enemyrmx1': 'Enemy Storm RMX',
-  'access': 'Access',
-  'yourown': 'Your Own Miracle',
-  'lovemode': 'Love Mode',
-  'playthefuture': 'Play The Future',
-  'jupiter': 'Jupiter Driving',
-  'xlasher': 'Xlasher',
-  'masairmx1': 'Masai RMX',
-  'keystothe': 'Keys to the World',
-  'area7': 'Area 7',
-  'burnitdown': 'Burn It Down',
-  'monoxide': 'MonoXide',
-  'getdown': 'Get Down',
-  'theguilty': 'The Guilty'
 };
 } },
 { name: "./utils", factory: function(require, exports, module) {
@@ -1289,5 +1222,8 @@ exports.setFlag = function(uid, key, y) {
     return localStorage.removeItem(id(uid, key));
   }
 };
+} },
+{ name: "./music-db", factory: function(require, exports, module) {
+module.exports=[{"id":"@gobaek1","title":"Proposed, Flower, Wolf Part 1","short":"PFW1","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"4"}]},{"id":"@gobaek2","title":"Proposed, Flower, Wolf Part 2","short":"PFW2","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"@naege","title":"Come to Me","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"8"}]},{"id":"@ner","title":"To You","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"7"}]},{"id":"ai","title":"A.I","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"access","title":"ACCESS","charts":[{"difficulty":"1","level":"2"},{"difficulty":"2","level":"3"},{"difficulty":"3","level":"6"}]},{"id":"area7","title":"Area 7","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"blythe","title":"BlythE","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"9"}]},{"id":"cherokee","title":"Cherokee","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"closer","title":"Closer","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"5"}]},{"id":"coastaltempo","title":"Coastal Tempo","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"color","title":"Color","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"coloursof","title":"Colours of Sorrow","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"creator","title":"Creator","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"}]},{"id":"dearmylady","title":"Dear My Lady","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"divineservice","title":"Divine Service","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"electronics","title":"Electronics","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"}]},{"id":"endofthemoon","title":"End of the Moonlight","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"enemystorm","title":"Enemy Storm","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"9"}]},{"id":"fate","title":"Fate","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"fermion","title":"Fermion","charts":[{"difficulty":"1","level":"8"},{"difficulty":"2","level":"10"}]},{"id":"firstkiss","title":"First Kiss","charts":[{"difficulty":"1","level":"2"},{"difficulty":"2","level":"4"},{"difficulty":"3","level":"5"}]},{"id":"flea","title":"Flea","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"freedom","title":"Freedom","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"fury","title":"Fury","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"hereinthe","title":"Here in the Moment","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"}]},{"id":"hexad","title":"HEXAD","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"honeymoon","title":"Honeymoon","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"4"},{"difficulty":"3","level":"8"}]},{"id":"iwantyou","title":"I Want You","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"inmyheart","title":"In My Heart","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"4"},{"difficulty":"3","level":"5"}]},{"id":"jupiter","title":"Jupiter Driving","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"keystothe","title":"Keys to the World","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"ladymade","title":"Ladymade Star","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"landscape","title":"Landscape","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"9"}]},{"id":"lovemode","title":"Love Mode","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"lover","title":"Lover","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"melody","title":"Melody","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"8"}]},{"id":"miles","title":"Miles","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"oblivion","title":"OblivioN","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"8"}]},{"id":"pdm","title":"PDM","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"8"}]},{"id":"playthefuture","title":"Play The Future","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"7"}]},{"id":"remember","title":"Remember","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"shoreline","title":"Shoreline","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"sin","title":"SIN","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"},{"difficulty":"3","level":"9"}]},{"id":"sonof","title":"SON OF SUN","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"},{"difficulty":"3","level":"10"}]},{"id":"stop","title":"STOP","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"supersonic","title":"SuperSonic","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"7"}]},{"id":"sweetshining","title":"Sweet Shining Shooting Star","short":"SSSS","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"theclear","title":"The Clear Blue Sky","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"thelastdance","title":"The Last Dance","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"7"}]},{"id":"voyage","title":"Voyage","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"}]},{"id":"whiteblue","title":"White Blue","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"y","title":"Y","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"yourown","title":"Your Own Miracle","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"8"}]},{"id":"@baramege","title":"Ask to Wind","charts":[{"difficulty":"1","level":"1"},{"difficulty":"2","level":"5"}]},{"id":"@baramegelive","title":"Ask to Wind -Live version-","short":"Ask to Wind -Live-","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"}]},{"id":"someday","title":"Someday","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"7"}]},{"id":"brandnewdays","title":"Brand NEW Days","charts":[{"difficulty":"1","level":"2"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"@piano","title":"Piano Concerto No.1","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"},{"difficulty":"3","level":"9"}]},{"id":"eternalmemory","title":"Eternal Memory","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"7"}]},{"id":"rayof","title":"Ray of Illuminati","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"spaceofsoul","title":"Space of Soul","charts":[{"difficulty":"1","level":"8"},{"difficulty":"2","level":"9"}]},{"id":"heartofwitch","title":"Heart of Witch","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"dualstrikers","title":"Dual Strikers","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"}]},{"id":"cozyquilt","title":"Cozy Quilt","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"8"}]},{"id":"lacamp","title":"La Campanella : Nu Rave","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"}]},{"id":"outlawreborn","title":"OUT LAW - Reborn","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"cosmicfantastic","title":"Cosmic Fantastic Lovesong","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"puzzler","title":"Puzzler","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"7"}]},{"id":"beeutiful","title":"BEE-U-TIFUL","charts":[{"difficulty":"1","level":"7"},{"difficulty":"2","level":"9"}]},{"id":"d2","title":"D2","charts":[{"difficulty":"1","level":"8"},{"difficulty":"2","level":"9"},{"difficulty":"3","level":"10"}]},{"id":"xlasher","title":"XLASHER","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"}]},{"id":"sweetdream","title":"Sweet Dream","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"}]},{"id":"putemup","title":"Put Em Up","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"}]},{"id":"sayitfrom","title":"Say It From Your Heart","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"}]},{"id":"rage","title":"Rage Of Demon","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"9"},{"difficulty":"3","level":"9"}]},{"id":"trip","title":"Trip","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"}]},{"id":"monoxide","title":"MonoXide","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"supersonicrmx","title":"SuperSonic(Mr.Funky Remix)","short":"SuperSonic RMX","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"9"}]},{"id":"burnitdown","title":"Burn It Down","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"theguilty","title":"The Guilty","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"airwave","title":"Airwave","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"9"}]},{"id":"eternalfantasy","title":"Eternal Fantasy","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"loveis","title":"Love is Beautiful","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"5"},{"difficulty":"3","level":"6"}]},{"id":"dreamofwinds","title":"Dream of Winds","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"},{"difficulty":"3","level":"9"}]},{"id":"novarmx","title":"Nova(Mr.Funky Remix)","short":"Nova RMX","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"}]},{"id":"thor","title":"Thor","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"10"}]},{"id":"thenightstage","title":"The Night Stage","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"}]},{"id":"beyondthe","title":"Beyond The Future","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"},{"difficulty":"3","level":"8"}]},{"id":"@youngwon","title":"Forever","charts":[{"difficulty":"1","level":"4"},{"difficulty":"2","level":"6"}]},{"id":"darkenvy","title":"Dark Envy","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"}]},{"id":"getdown","title":"Get Down","charts":[{"difficulty":"1","level":"4"}]},{"id":"rutin","title":"Ruti'n","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"}]},{"id":"secretworld","title":"Secret World","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"}]},{"id":"lovely","title":"Lovely Hands","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"}]},{"id":"jealousy","title":"Jealousy","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"}]},{"id":"desperado","title":"Desperado","charts":[{"difficulty":"1","level":"5"}]},{"id":"inmydream","title":"In My Dream","charts":[{"difficulty":"1","level":"5"}]},{"id":"grave","title":"Grave Consequence","charts":[{"difficulty":"1","level":"7"},{"difficulty":"2","level":"8"}]},{"id":"beatudown","title":"Beat U Down","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"7"}]},{"id":"cypher","title":"Cypher Gate","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"9"},{"difficulty":"3","level":"10"}]},{"id":"readynow","title":"Ready Now","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"8"}]},{"id":"djmax","title":"DJMAX","charts":[{"difficulty":"1","level":"3"},{"difficulty":"2","level":"4"}]},{"id":"luvflowrmx1","title":"Luv Flow(Funky House Mix)","short":"Luv Flow RMX","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"enemyrmx1","title":"Enemy Storm(Dark Jungle Mix)","short":"Enemy Storm RMX","charts":[{"difficulty":"1","level":"6"},{"difficulty":"2","level":"8"},{"difficulty":"3","level":"9"}]},{"id":"masairmx1","title":"MASAI(Electro House Mix)","short":"MASAI RMX","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"desperadormx1","title":"Desperado(Nu skool Mix)","short":"Desperado RMX","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]},{"id":"zetrmx1","title":"Zet(Mr.Funky Remix)","short":"Zet RMX","charts":[{"difficulty":"1","level":"5"},{"difficulty":"2","level":"6"},{"difficulty":"3","level":"7"}]}]
 } }
 );

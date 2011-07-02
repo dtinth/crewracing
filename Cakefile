@@ -36,9 +36,14 @@ class Compiler
 
 	compileFile: (filename) ->
 		contents   = fs.readFileSync filename, 'utf-8'
-		moduleName = filename.replace(/^.*\//, './').replace(/\.coffee$/, '')
+		moduleName = filename.replace(/^.*\//, './').replace(/\.[a-z]+$/, '')
 		try
-			code = cs.compile contents, bare: true
+			if /\.coffee$/.test filename
+				code = cs.compile contents, bare: true
+			else if /\.json$/.test filename
+				code = 'module.exports=' + contents
+			else
+				code = contents
 			fn = new Function(code)
 			console.log "... #{moduleName}: ok!"
 		catch e
@@ -84,10 +89,10 @@ getCompiler = ->
 	compiler.addFile 'src/data.coffee'
 	compiler.addFile 'src/db.coffee'
 	compiler.addFile 'src/songdb.coffee'
-	compiler.addFile 'src/songmap.coffee'
 	compiler.addFile 'src/utils.coffee'
 	compiler.addFile 'src/hash.coffee'
 	compiler.addFile 'src/storage.coffee'
+	compiler.addFile 'src/music-db.json'
 	return compiler
 
 task 'compile', 'Compile source code files to js.js once', (options) ->
@@ -98,3 +103,20 @@ task 'watch', 'Watch files for changes, and compile once they have changed', (op
 	compiler = getCompiler()
 	compiler.watch()
 
+task 'music', 'Creates the music database file', (options) ->
+	{ jsdom } = require 'jsdom'
+	doc = jsdom fs.readFileSync 'music-db/music-db.xml', 'utf-8'
+	out = []
+	toobj = (node, fn) ->
+		obj = {}
+		for attr in node.attributes
+			obj[attr.nodeName] = attr.nodeValue
+		if fn
+			fn.call obj
+		return obj
+	for music in doc.getElementsByTagName 'music'
+		out.push toobj music, ->
+			@charts = []
+			for chart in music.getElementsByTagName 'chart'
+				@charts.push toobj chart
+	fs.writeFileSync 'src/music-db.json', JSON.stringify(out)
