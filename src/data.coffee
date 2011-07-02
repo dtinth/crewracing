@@ -208,6 +208,8 @@ exports.Database = class Database
 				filter.index crew, crew.course.producer
 				for stage in crew.course.stages
 					filter.index crew, stage.pattern.title
+					if stage.pattern.song.info
+						filter.index crew, stage.pattern.song.info.title
 
 		return filter
 

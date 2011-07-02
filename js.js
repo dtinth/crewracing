@@ -558,7 +558,12 @@ exports.Table = Table = (function() {
     return fx;
   };
   Table.prototype.renderStageInfo = function(stage) {
-    return "<span class=\"song-name\">" + stage.pattern.song.title + "</span> <span class=\"song-pattern p" + stage.pattern.level + "\">" + stage.pattern.levelName + "</span>";
+    var lv;
+    lv = stage.pattern.levelName;
+    if (stage.pattern.info && stage.pattern.info.level) {
+      lv = "<span title=\"Lv." + stage.pattern.info.level + "\">" + lv + "</span>";
+    }
+    return "<span class=\"song-name\">" + stage.pattern.song.title + "</span> <span class=\"song-pattern p" + stage.pattern.level + "\">" + lv + "</span>";
   };
   return Table;
 })();
@@ -876,6 +881,9 @@ exports.Database = Database = (function() {
         for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
           stage = _ref2[_i];
           filter.index(crew, stage.pattern.title);
+          if (stage.pattern.song.info) {
+            filter.index(crew, stage.pattern.song.info.title);
+          }
         }
       }
     }

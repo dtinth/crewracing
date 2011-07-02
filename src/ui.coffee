@@ -349,6 +349,9 @@ exports.Table = class Table
 		fx
 	
 	renderStageInfo: (stage) ->
+		lv = stage.pattern.levelName
+		if stage.pattern.info and stage.pattern.info.level
+			lv = "<span title=\"Lv.#{stage.pattern.info.level}\">#{lv}</span>"
 		"""
-			<span class="song-name">#{stage.pattern.song.title}</span> <span class="song-pattern p#{stage.pattern.level}">#{stage.pattern.levelName}</span>
+			<span class="song-name">#{stage.pattern.song.title}</span> <span class="song-pattern p#{stage.pattern.level}">#{lv}</span>
 		"""
